@@ -184,6 +184,11 @@ model Withdrawal {
   @@index([createdAt])
 }
 
+enum CommissionType {
+  INVESTMENT
+  PROFIT
+}
+
 model Commission {
   id String @id @default(cuid(2))
 
@@ -191,6 +196,9 @@ model Commission {
   sourceUserId String
 
   investmentId String?
+
+  level        Int
+  type         CommissionType
 
   percentageBps Int
   amount        BigInt
@@ -202,6 +210,27 @@ model Commission {
   @@index([userId])
   @@index([sourceUserId])
   @@index([investmentId])
+  @@index([level])
+  @@index([type])
+}
+
+model Rank {
+  id String @id @default(cuid(2))
+
+  level Int @unique
+  name  String
+
+  minOwnInvestment      BigInt @default(0)
+  minReferralInvestment BigInt
+
+  bonus BigInt @default(0)
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  @@index([level])
+  @@index([isActive])
 }
 
 model Transaction {
@@ -239,22 +268,6 @@ model PaymentMethod {
   updatedAt temporal.updatedAt()
 }
 
-model Rank {
-  id String @id @default(cuid(2))
-
-  name String
-
-  minReferral Int
-  minVolume   BigInt
-
-  bonus BigInt @default(0)
-
-  isActive Boolean @default(true)
-
-  createdAt DateTime @default(now())
-
-  @@index([isActive])
-}
 
 model News {
   id String @id @default(cuid(2))

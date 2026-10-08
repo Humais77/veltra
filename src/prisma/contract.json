@@ -57,6 +57,19 @@
     "namespaces": {
       "public": {
         "enum": {
+          "CommissionType": {
+            "codecId": "pg/text@1",
+            "members": [
+              {
+                "name": "INVESTMENT",
+                "value": "INVESTMENT"
+              },
+              {
+                "name": "PROFIT",
+                "value": "PROFIT"
+              }
+            ]
+          },
           "DepositStatus": {
             "codecId": "pg/text@1",
             "members": [
@@ -241,6 +254,13 @@
                   "kind": "scalar"
                 }
               },
+              "level": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
               "percentageBps": {
                 "nullable": false,
                 "type": {
@@ -253,6 +273,19 @@
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
+                }
+              },
+              "type": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "CommissionType",
+                  "namespaceId": "public",
+                  "plane": "domain"
                 }
               },
               "userId": {
@@ -295,11 +328,17 @@
                 "investmentId": {
                   "column": "investmentId"
                 },
+                "level": {
+                  "column": "level"
+                },
                 "percentageBps": {
                   "column": "percentageBps"
                 },
                 "sourceUserId": {
                   "column": "sourceUserId"
+                },
+                "type": {
+                  "column": "type"
                 },
                 "userId": {
                   "column": "userId"
@@ -1002,14 +1041,21 @@
                   "kind": "scalar"
                 }
               },
-              "minReferral": {
+              "level": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/int4@1",
                   "kind": "scalar"
                 }
               },
-              "minVolume": {
+              "minOwnInvestment": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int8@1",
+                  "kind": "scalar"
+                }
+              },
+              "minReferralInvestment": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/int8@1",
@@ -1039,11 +1085,14 @@
                 "isActive": {
                   "column": "isActive"
                 },
-                "minReferral": {
-                  "column": "minReferral"
+                "level": {
+                  "column": "level"
                 },
-                "minVolume": {
-                  "column": "minVolume"
+                "minOwnInvestment": {
+                  "column": "minOwnInvestment"
+                },
+                "minReferralInvestment": {
+                  "column": "minReferralInvestment"
                 },
                 "name": {
                   "column": "name"
@@ -1721,6 +1770,13 @@
         "entries": {
           "table": {
             "Commission": {
+              "checks": [
+                {
+                  "expression": "\"type\" IN ('INVESTMENT', 'PROFIT')",
+                  "name": "Commission_type_check_3e5c2da0",
+                  "prefix": "Commission_type_check"
+                }
+              ],
               "columns": {
                 "amount": {
                   "codecId": "pg/int8@1",
@@ -1746,6 +1802,11 @@
                   "dataType": "pg/text",
                   "nullable": true
                 },
+                "level": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
                 "percentageBps": {
                   "codecId": "pg/int4@1",
                   "dataType": "pg/int4",
@@ -1755,6 +1816,17 @@
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
+                },
+                "type": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false,
+                  "valueSet": {
+                    "entityKind": "valueSet",
+                    "entityName": "CommissionType",
+                    "namespaceId": "public",
+                    "plane": "storage"
+                  }
                 },
                 "userId": {
                   "codecId": "pg/text@1",
@@ -1791,10 +1863,26 @@
                 },
                 {
                   "columns": [
+                    "level"
+                  ],
+                  "name": "Commission_level_idx_30977cf3",
+                  "prefix": "Commission_level_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
                     "sourceUserId"
                   ],
                   "name": "Commission_sourceUserId_idx_a0f1c625",
                   "prefix": "Commission_sourceUserId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "type"
+                  ],
+                  "name": "Commission_type_idx_b6b604ea",
+                  "prefix": "Commission_type_idx",
                   "unique": false
                 },
                 {
@@ -2424,12 +2512,21 @@
                   },
                   "nullable": false
                 },
-                "minReferral": {
+                "level": {
                   "codecId": "pg/int4@1",
                   "dataType": "pg/int4",
                   "nullable": false
                 },
-                "minVolume": {
+                "minOwnInvestment": {
+                  "codecId": "pg/int8@1",
+                  "dataType": "pg/int8",
+                  "default": {
+                    "kind": "literal",
+                    "value": "0"
+                  },
+                  "nullable": false
+                },
+                "minReferralInvestment": {
                   "codecId": "pg/int8@1",
                   "dataType": "pg/int8",
                   "nullable": false
@@ -2449,6 +2546,14 @@
                   "name": "Rank_isActive_idx_77fe3ba1",
                   "prefix": "Rank_isActive_idx",
                   "unique": false
+                },
+                {
+                  "columns": [
+                    "level"
+                  ],
+                  "name": "Rank_level_idx_30977cf3",
+                  "prefix": "Rank_level_idx",
+                  "unique": false
                 }
               ],
               "primaryKey": {
@@ -2456,7 +2561,13 @@
                   "id"
                 ]
               },
-              "uniques": []
+              "uniques": [
+                {
+                  "columns": [
+                    "level"
+                  ]
+                }
+              ]
             },
             "SupportTicket": {
               "checks": [
@@ -3010,6 +3121,13 @@
             }
           },
           "valueSet": {
+            "CommissionType": {
+              "kind": "valueSet",
+              "values": [
+                "INVESTMENT",
+                "PROFIT"
+              ]
+            },
             "DepositStatus": {
               "kind": "valueSet",
               "values": [
@@ -3084,7 +3202,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "3d1ee5a6f982358d8e37c676c29eb09bd0d65caac8084c710c0dfe5fdf3caba8"
+    "storageHash": "7a6f7b4f9a5818c92912c13b083c18a0d583db7a6a767d874c34fd4584f1ed40"
   },
   "execution": {
     "executionHash": "9f7677a22daf1ec819cef470e09a334b686608bf53a2830260365ca45155bd28",

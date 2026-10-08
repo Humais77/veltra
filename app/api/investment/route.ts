@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/src/lib/auth";
 import { db } from "@/src/prisma/db";
 import { serializeBigInts } from "@/src/lib/money";
+import { createReferralCommissions } from "@/src/lib/createReferralComissions";
 
 export async function GET() {
   try {
@@ -146,84 +147,39 @@ export async function POST(request: Request) {
        * Create investment.
        */
       const investment =
-        await tx.orm.public.Investment.create({
-          userId: user.id,
-          planId: plan.id,
-          amount: plan.investmentAmount,
-          reward: plan.rewardAmount,
-          status: "ACTIVE",
-        });
+  await tx.orm.public.Investment.create({
+    userId: user.id,
+    planId: plan.id,
+    amount: plan.investmentAmount,
+    reward: plan.rewardAmount,
+    status: "ACTIVE",
+  });
 
-      /*
-       * Deduct investment amount
-       * from user balance.
-       */
-      await tx.orm.public.User
-        .where({
-          id: user.id,
-        })
-        .update({
-          balance:
-            currentUser.balance -
-            plan.investmentAmount,
-        });
+await tx.orm.public.User
+  .where({ id: user.id })
+  .update({
+    balance:
+      currentUser.balance -
+      plan.investmentAmount,
+  });
 
-      /*
-       * Investment transaction.
-       */
-      await tx.orm.public.Transaction.create({
-        userId: user.id,
-        type: "INVESTMENT",
-        amount: plan.investmentAmount,
-        note: `Investment in ${plan.name}`,
-      });
+await tx.orm.public.Transaction.create({
+  userId: user.id,
+  type: "INVESTMENT",
+  amount: plan.investmentAmount,
+  note: `Investment in ${plan.name}`,
+});
 
-      /*
-       * Direct referral commission = 2%.
-       */
-      if (currentUser.referredById) {
-        const commission =
-          (plan.investmentAmount * 200n) /
-          10000n;
-
-        if (commission > 0n) {
-          const referrer =
-            await tx.orm.public.User.first({
-              id: currentUser.referredById,
-            });
-
-          if (referrer) {
-            await tx.orm.public.Commission.create({
-              userId: referrer.id,
-              sourceUserId: user.id,
-              investmentId: investment.id,
-              percentageBps: 200,
-              amount: commission,
-            });
-
-            await tx.orm.public.User
-              .where({
-                id: referrer.id,
-              })
-              .update({
-                balance:
-                  referrer.balance +
-                  commission,
-
-                totalCommission:
-                  referrer.totalCommission +
-                  commission,
-              });
-
-            await tx.orm.public.Transaction.create({
-              userId: referrer.id,
-              type: "REFERRAL_COMMISSION",
-              amount: commission,
-              note: `2% referral commission from ${user.username}`,
-            });
-          }
-        }
-      }
+/*
+ * Five-level investment commission.
+ */
+await createReferralCommissions({
+  tx,
+  sourceUserId: user.id,
+  amount: plan.investmentAmount,
+  investmentId: investment.id,
+  type: "INVESTMENT",
+});
 
       return investment;
     });
