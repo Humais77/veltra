@@ -2,6 +2,7 @@
 
 import {
   FormEvent,
+  Suspense,
   useEffect,
   useState,
 } from "react";
@@ -19,7 +20,8 @@ import {
   Loader2,
 } from "lucide-react";
 
-export default function LoginPage() {
+// Inner component that uses useSearchParams
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -28,15 +30,10 @@ export default function LoginPage() {
   );
 
   const [password, setPassword] = useState("");
-
-  const [showPassword, setShowPassword] =
-    useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const [registered, setRegistered] =
-    useState(false);
+  const [registered, setRegistered] = useState(false);
 
   useEffect(() => {
     if (searchParams.get("registered") === "1") {
@@ -53,27 +50,18 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-          }),
-        }
-      );
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(
-          data.error ||
-            "Invalid username or password."
-        );
+        setError(data.error || "Invalid username or password.");
         return;
       }
 
@@ -85,9 +73,7 @@ export default function LoginPage() {
 
       router.refresh();
     } catch {
-      setError(
-        "Unable to connect to the server."
-      );
+      setError("Unable to connect to the server.");
     } finally {
       setLoading(false);
     }
@@ -106,9 +92,7 @@ export default function LoginPage() {
             <div className="h-4 w-4 rounded-full bg-[#050814]" />
           </div>
 
-          <span className="text-2xl font-bold">
-            Veltra
-          </span>
+          <span className="text-2xl font-bold">Veltra</span>
         </Link>
 
         <div className="rounded-3xl border border-white/10 bg-[#080b1f]/90 p-7 shadow-2xl sm:p-9">
@@ -117,9 +101,7 @@ export default function LoginPage() {
               Welcome Back
             </p>
 
-            <h1 className="text-3xl font-black">
-              Login
-            </h1>
+            <h1 className="text-3xl font-black">Login</h1>
 
             <p className="mt-2 text-sm text-gray-400">
               Access your account dashboard.
@@ -128,8 +110,7 @@ export default function LoginPage() {
 
           {registered && (
             <div className="mb-5 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-300">
-              Account created successfully.
-              Please login.
+              Account created successfully. Please login.
             </div>
           )}
 
@@ -139,10 +120,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-          >
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-400">
                 Username
@@ -156,9 +134,7 @@ export default function LoginPage() {
 
                 <input
                   value={username}
-                  onChange={(e) =>
-                    setUsername(e.target.value)
-                  }
+                  onChange={(e) => setUsername(e.target.value)}
                   placeholder="Enter username"
                   autoComplete="username"
                   className="w-full rounded-xl border border-white/10 bg-[#050814] py-4 pl-11 pr-4 text-sm outline-none transition focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/30"
@@ -179,15 +155,9 @@ export default function LoginPage() {
                 />
 
                 <input
-                  type={
-                    showPassword
-                      ? "text"
-                      : "password"
-                  }
+                  type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) =>
-                    setPassword(e.target.value)
-                  }
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
                   autoComplete="current-password"
                   className="w-full rounded-xl border border-white/10 bg-[#050814] py-4 pl-11 pr-12 text-sm outline-none transition focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/30"
@@ -196,18 +166,10 @@ export default function LoginPage() {
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowPassword(
-                      (value) => !value
-                    )
-                  }
+                  onClick={() => setShowPassword((value) => !value)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
                 >
-                  {showPassword ? (
-                    <EyeOff size={18} />
-                  ) : (
-                    <Eye size={18} />
-                  )}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -219,10 +181,7 @@ export default function LoginPage() {
             >
               {loading ? (
                 <>
-                  <Loader2
-                    size={18}
-                    className="animate-spin"
-                  />
+                  <Loader2 size={18} className="animate-spin" />
                   Signing in...
                 </>
               ) : (
@@ -250,14 +209,24 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-8 flex items-center justify-center gap-2 text-[10px] text-gray-600">
-            <ShieldCheck
-              size={13}
-              className="text-green-500"
-            />
+            <ShieldCheck size={13} className="text-green-500" />
             Secure HTTP-only session
           </div>
         </div>
       </div>
     </main>
+  );
+}
+
+// Default export wraps the form in Suspense
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-[#050814] text-white">
+        <Loader2 className="animate-spin" size={32} />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

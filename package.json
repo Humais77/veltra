@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "contract:emit": "prisma contract emit"
+    "contract:emit": "prisma contract emit",
+    "seed:plans": "tsx scripts/seed-plans.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -24,6 +25,7 @@
     "recharts": "^3.10.1",
     "sonner": "^2.0.8",
     "temporal-polyfill": "^1.0.5",
+    "tsx": "^4.23.15",
     "zod": "^4.6.5"
   },
   "devDependencies": {
