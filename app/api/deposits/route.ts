@@ -4,25 +4,37 @@ import { db } from "@/src/prisma/db";
 import { serializeBigInts } from "@/src/lib/money";
 
 export async function GET() {
-  const user = await getCurrentUser();
+  try {
+    const user = await getCurrentUser();
 
-  if (!user) {
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const deposits = await db.orm.public.Deposit
+      .where({
+        userId: user.id,
+      })
+      .orderBy((deposit) => deposit.createdAt.desc())
+      .all();
+
+    return NextResponse.json({
+      success: true,
+      deposits: serializeBigInts(deposits),
+    });
+  } catch (error) {
+    console.error("GET_DEPOSITS_ERROR", error);
+
     return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
+      {
+        error: "Failed to load deposits",
+      },
+      { status: 500 }
     );
   }
-
-  const deposits = await db.orm.public.Deposit
-    .where({
-      userId: user.id,
-    })
-    .orderBy((d) => d.createdAt.desc())
-    .all();
-
-  return NextResponse.json(
-    serializeBigInts(deposits)
-  );
 }
 
 export async function POST(request: Request) {
@@ -38,20 +50,46 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    const amount = BigInt(body.amount);
-    const transactionId =
-      String(body.transactionId || "").trim();
+    const rawAmount = body.amount;
+    const transactionId = String(
+      body.transactionId || ""
+    ).trim();
 
-    if (amount <= 0n) {
+    if (
+      rawAmount === undefined ||
+      rawAmount === null ||
+      rawAmount === ""
+    ) {
+      return NextResponse.json(
+        { error: "Amount is required" },
+        { status: 400 }
+      );
+    }
+
+    let amount: bigint;
+
+    try {
+      amount = BigInt(String(rawAmount));
+    } catch {
       return NextResponse.json(
         { error: "Invalid amount" },
         { status: 400 }
       );
     }
 
+    if (amount <= 0n) {
+      return NextResponse.json(
+        { error: "Amount must be greater than zero" },
+        { status: 400 }
+      );
+    }
+
     if (!transactionId) {
       return NextResponse.json(
-        { error: "EasyPaisa transaction ID is required" },
+        {
+          error:
+            "EasyPaisa transaction ID is required",
+        },
         { status: 400 }
       );
     }
@@ -67,15 +105,22 @@ export async function POST(request: Request) {
       });
 
     return NextResponse.json(
-      serializeBigInts(deposit),
+      {
+        success: true,
+        message:
+          "Deposit submitted successfully. Please wait for admin approval.",
+        deposit: serializeBigInts(deposit),
+      },
       { status: 201 }
     );
   } catch (error) {
-    console.error("DEPOSIT_ERROR", error);
+    console.error("POST_DEPOSIT_ERROR", error);
 
     return NextResponse.json(
-      { error: "Deposit request failed" },
-      { status: 400 }
+      {
+        error: "Deposit request failed",
+      },
+      { status: 500 }
     );
   }
 }

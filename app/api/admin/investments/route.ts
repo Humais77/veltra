@@ -14,20 +14,30 @@ export async function GET() {
       );
     }
 
-    const deposits = await db.orm.public.Deposit
-      .include("user")
-      .orderBy((deposit) => deposit.createdAt.desc())
-      .all();
+    const investments =
+      await db.orm.public.Investment
+        .include("user")
+        .include("plan")
+        .orderBy((investment) =>
+          investment.createdAt.desc()
+        )
+        .all();
 
     return NextResponse.json({
-      success: true,
-      deposits: serializeBigInts(deposits),
+      investments:
+        serializeBigInts(investments),
     });
   } catch (error) {
-    console.error("ADMIN_DEPOSITS_GET_ERROR", error);
+    console.error(
+      "ADMIN_INVESTMENTS_GET_ERROR",
+      error
+    );
 
     return NextResponse.json(
-      { success: false, error: "Failed to load deposits" },
+      {
+        error:
+          "Failed to load investments",
+      },
       { status: 500 }
     );
   }

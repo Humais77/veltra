@@ -4,24 +4,41 @@ import { db } from "@/src/prisma/db";
 import { serializeBigInts } from "@/src/lib/money";
 
 export async function GET() {
-  const user = await getCurrentUser();
+  try {
+    const user = await getCurrentUser();
 
-  if (!user) {
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const transactions =
+      await db.orm.public.Transaction
+        .where({
+          userId: user.id,
+        })
+        .orderBy((transaction) =>
+          transaction.createdAt.desc()
+        )
+        .all();
+
+    return NextResponse.json({
+      transactions:
+        serializeBigInts(transactions),
+    });
+  } catch (error) {
+    console.error(
+      "GET_TRANSACTIONS_ERROR",
+      error
+    );
+
     return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
+      {
+        error: "Failed to load transactions",
+      },
+      { status: 500 }
     );
   }
-
-  const transactions =
-    await db.orm.public.Transaction
-      .where({
-        userId: user.id,
-      })
-      .orderBy((t) => t.createdAt.desc())
-      .all();
-
-  return NextResponse.json(
-    serializeBigInts(transactions)
-  );
 }

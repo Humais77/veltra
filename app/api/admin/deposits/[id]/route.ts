@@ -16,91 +16,93 @@ export async function PATCH(
 
     if (!admin || admin.role !== "ADMIN") {
       return NextResponse.json(
-        { error: "Forbidden" },
+        { success: false, error: "Forbidden" },
         { status: 403 }
       );
     }
 
     const { id } = await params;
-    const { status } = await request.json();
+    const body = await request.json();
+    const status = body.status;
 
-    if (!["APPROVED", "REJECTED"].includes(status)) {
+    if (status !== "APPROVED" && status !== "REJECTED") {
       return NextResponse.json(
-        { error: "Invalid status" },
+        { success: false, error: "Invalid status" },
         { status: 400 }
       );
     }
 
-    const result = await db.transaction(async (tx) => {
-      const deposit =
-        await tx.orm.public.Deposit.first({ id });
+    // Look up the deposit
+    const deposit = await db.orm.public.Deposit
+      .where({ id })
+      .first();
 
-      if (!deposit) {
-        throw new Error("NOT_FOUND");
-      }
-
-      if (deposit.status !== "PENDING") {
-        throw new Error("ALREADY_PROCESSED");
-      }
-
-      const updated =
-        await tx.orm.public.Deposit
-          .where({ id })
-          .update({
-            status,
-          });
-
-      if (status === "APPROVED") {
-        const user =
-          await tx.orm.public.User.first({
-            id: deposit.userId,
-          });
-
-        if (!user) {
-          throw new Error("USER_NOT_FOUND");
-        }
-
-        await tx.orm.public.User
-          .where({ id: user.id })
-          .update({
-            balance: user.balance + deposit.amount,
-            totalDeposit:
-              user.totalDeposit + deposit.amount,
-          });
-
-        await tx.orm.public.Transaction.create({
-          userId: user.id,
-          type: "DEPOSIT",
-          amount: deposit.amount,
-          note: `EasyPaisa deposit ${deposit.transactionId ?? ""}`,
-        });
-      }
-
-      return updated;
-    });
-
-    return NextResponse.json(
-      serializeBigInts(result)
-    );
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === "NOT_FOUND") {
-        return NextResponse.json(
-          { error: "Deposit not found" },
-          { status: 404 }
-        );
-      }
-
-      if (error.message === "ALREADY_PROCESSED") {
-        return NextResponse.json(
-          { error: "Deposit already processed" },
-          { status: 400 }
-        );
-      }
+    if (!deposit) {
+      return NextResponse.json(
+        { success: false, error: "Deposit not found" },
+        { status: 404 }
+      );
     }
 
+    if (deposit.status !== "PENDING") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "This deposit has already been processed.",
+        },
+        { status: 409 }
+      );
+    }
+
+    // Look up the user
+    const user = await db.orm.public.User
+      .where({ id: deposit.userId })
+      .first();
+
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Deposit user no longer exists.",
+        },
+        { status: 404 }
+      );
+    }
+
+    // Update deposit status
+    await db.orm.public.Deposit
+      .where({ id })
+      .update({ status });
+
+    // If approved, update user balance and create a transaction
+    if (status === "APPROVED") {
+      await db.orm.public.User
+        .where({ id: user.id })
+        .update({
+          balance: user.balance + deposit.amount,
+          totalDeposit: user.totalDeposit + deposit.amount,
+        });
+
+      await db.orm.public.Transaction.create({
+        userId: user.id,
+        type: "DEPOSIT",
+        amount: deposit.amount,
+        note: `EasyPaisa deposit ${deposit.transactionId ?? ""}`.trim(),
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message:
+        status === "APPROVED"
+          ? "Deposit approved successfully."
+          : "Deposit rejected successfully.",
+    });
+  } catch (error) {
+    console.error("ADMIN_DEPOSIT_REVIEW_ERROR", error);
+
     return NextResponse.json(
-      { error: "Failed to process deposit" },
+      { success: false, error: "Failed to process deposit" },
       { status: 500 }
     );
   }

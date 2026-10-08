@@ -4,60 +4,69 @@ import { db } from "@/src/prisma/db";
 import { serializeBigInts } from "@/src/lib/money";
 
 export async function GET() {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    );
-  }
-
-  const plans = await db.orm.public.Plan
-    .where({ isActive: true })
-    .orderBy((p) => p.investmentAmount.asc())
-    .all();
-
-  return NextResponse.json(
-    serializeBigInts(plans)
-  );
-}
-
-export async function POST(request: Request) {
   try {
     const user = await getCurrentUser();
 
-    if (!user || user.role !== "ADMIN") {
+    if (!user) {
       return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
+        { error: "Unauthorized" },
+        { status: 401 }
       );
     }
 
-    const body = await request.json();
+    // Find plans in which this user already has
+    // an active investment.
+    const activeInvestments =
+      await db.orm.public.Investment
+        .where({
+          userId: user.id,
+          status: "ACTIVE",
+        })
+        .all();
 
-    const plan = await db.orm.public.Plan.create({
-      name: body.name,
-      investmentAmount: BigInt(body.investmentAmount),
-      rewardAmount: BigInt(body.rewardAmount),
-      durationDays:
-        body.durationDays == null
-          ? null
-          : Number(body.durationDays),
-      isActive:
-        body.isActive === undefined
-          ? true
-          : Boolean(body.isActive),
-    });
-
-    return NextResponse.json(
-      serializeBigInts(plan),
-      { status: 201 }
+    const investedPlanIds = new Set(
+      activeInvestments.map(
+        (investment) => investment.planId
+      )
     );
-  } catch {
+
+    // Get all currently active plans.
+    const allActivePlans =
+      await db.orm.public.Plan
+        .where({
+          isActive: true,
+        })
+        .orderBy((plan) =>
+          plan.investmentAmount.asc()
+        )
+        .all();
+
+    // Remove plans already running for this user.
+    const availablePlans =
+      allActivePlans.filter(
+        (plan) =>
+          !investedPlanIds.has(plan.id)
+      );
+
+    return NextResponse.json({
+      success: true,
+      plans: serializeBigInts(
+        availablePlans
+      ),
+    });
+  } catch (error) {
+    console.error(
+      "GET_PLANS_ERROR",
+      error
+    );
+
     return NextResponse.json(
-      { error: "Invalid plan data" },
-      { status: 400 }
+      {
+        success: false,
+        error: "Failed to load plans",
+        plans: [],
+      },
+      { status: 500 }
     );
   }
 }

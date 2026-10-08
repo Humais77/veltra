@@ -54,6 +54,16 @@ export async function POST(request: Request) {
       if (!plan || !plan.isActive) {
         throw new Error("PLAN_NOT_FOUND");
       }
+      const existingInvestment =
+  await tx.orm.public.Investment.first({
+    userId: user.id,
+    planId: plan.id,
+    status: "ACTIVE",
+  });
+
+if (existingInvestment) {
+  throw new Error("ALREADY_INVESTED");
+}
 
       const currentUser = await tx.orm.public.User.first({
         id: user.id,
@@ -88,6 +98,7 @@ export async function POST(request: Request) {
         amount: plan.investmentAmount,
         note: `Investment in ${plan.name}`,
       });
+      
 
       // Direct referral commission = 2%
       if (currentUser.referredById) {

@@ -33,20 +33,39 @@ export default function AdminPlansPage() {
   const [message, setMessage] = useState("");
 
   async function loadPlans() {
-    try {
-      const response = await fetch("/api/plans", {
+  try {
+    setLoading(true);
+
+    const response = await fetch(
+      "/api/admin/plans",
+      {
         cache: "no-store",
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setPlans(data.plans ?? []);
       }
-    } finally {
-      setLoading(false);
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Failed to load plans."
+      );
     }
+
+    setPlans(data.plans ?? []);
+  } catch (error) {
+    console.error("LOAD_ADMIN_PLANS_ERROR", error);
+
+    setPlans([]);
+
+    setMessage(
+      error instanceof Error
+        ? error.message
+        : "Failed to load plans."
+    );
+  } finally {
+    setLoading(false);
   }
+}
 
   useEffect(() => {
     loadPlans();
@@ -59,7 +78,7 @@ export default function AdminPlansPage() {
     setMessage("");
 
     try {
-      const response = await fetch("/api/plans", {
+      const response = await fetch("/api/admin/plans", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +114,7 @@ export default function AdminPlansPage() {
   }
 
   async function togglePlan(plan: Plan) {
-    const response = await fetch(`/api/plans/${plan.id}`, {
+    const response = await fetch(`/api/admin/plans/${plan.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -117,7 +136,7 @@ export default function AdminPlansPage() {
 
     if (!confirmed) return;
 
-    const response = await fetch(`/api/plans/${id}`, {
+    const response = await fetch(`/api/admin/plans/${id}`, {
       method: "DELETE",
     });
 
