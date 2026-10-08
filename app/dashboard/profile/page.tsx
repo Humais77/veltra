@@ -14,15 +14,17 @@ import {
   Mail,
   UserRound,
 } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 type Profile = {
   fullName: string;
   username: string;
   email: string;
   phone: string;
+  emailVerified: boolean;
 };
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [profile, setProfile] =
     useState<Profile | null>(null);
 
@@ -99,7 +101,7 @@ export default function ProfilePage() {
         if (!response.ok) {
           setProfileError(
             data.error ||
-              "Unable to load profile."
+            "Unable to load profile."
           );
           return;
         }
@@ -161,7 +163,7 @@ export default function ProfilePage() {
       if (!response.ok) {
         setProfileError(
           data.error ||
-            "Unable to update profile."
+          "Unable to update profile."
         );
         return;
       }
@@ -238,7 +240,7 @@ export default function ProfilePage() {
       if (!response.ok) {
         setPasswordError(
           data.error ||
-            "Unable to change password."
+          "Unable to change password."
         );
         return;
       }
@@ -340,14 +342,39 @@ export default function ProfilePage() {
               }
             />
 
-            <Field
-              label="Email"
-              value={email}
-              disabled
-              icon={
-                <Mail size={15} />
-              }
-            />
+            <div>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-400">
+                Email
+              </label>
+
+              <div className="flex items-center gap-3">
+                <input
+                  value={profile?.email ?? ""}
+                  readOnly
+                  className="flex-1 rounded-xl border border-white/10 bg-[#050814] px-4 py-3.5 text-sm"
+                />
+
+                {profile?.emailVerified ? (
+                  <span className="rounded-lg border border-green-500/20 bg-green-500/10 px-3 py-2 text-xs font-semibold text-green-400">
+                    Verified
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      router.push(
+                        `/verify-email?email=${encodeURIComponent(
+                          profile?.email ?? ""
+                        )}`
+                      )
+                    }
+                    className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-xs font-semibold text-yellow-400"
+                  >
+                    Verify
+                  </button>
+                )}
+              </div>
+            </div>
 
             <Field
               label="Phone"
@@ -518,15 +545,13 @@ function Field({
               event.target.value
             )
           }
-          className={`w-full rounded-2xl border border-white/10 bg-[#050814] px-4 py-3.5 text-sm outline-none ${
-            icon
+          className={`w-full rounded-2xl border border-white/10 bg-[#050814] px-4 py-3.5 text-sm outline-none ${icon
               ? "pl-11"
               : ""
-          } ${
-            disabled
+            } ${disabled
               ? "cursor-not-allowed opacity-50"
               : ""
-          } focus:border-pink-500/50`}
+            } focus:border-pink-500/50`}
         />
       </div>
     </label>
@@ -542,11 +567,10 @@ function Message({
 }) {
   return (
     <div
-      className={`mb-6 flex items-center gap-2 rounded-2xl p-4 text-sm ${
-        type === "success"
+      className={`mb-6 flex items-center gap-2 rounded-2xl p-4 text-sm ${type === "success"
           ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-400"
           : "border border-red-400/20 bg-red-400/10 text-red-400"
-      }`}
+        }`}
     >
       <CheckCircle2 size={17} />
       {message}

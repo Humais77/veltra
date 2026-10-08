@@ -18,7 +18,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'1d5ece5cac6be7c40bde50c936e4ca006ee766e16c65fd33eb95082d5e747650'>;
+  StorageHashBase<'59869fbbbaef0776d2b0e3b21fb6c90ae71e8824f437a553616f06cb39c1339c'>;
 export type ExecutionHash =
   ExecutionHashBase<'9f7677a22daf1ec819cef470e09a334b686608bf53a2830260365ca45155bd28'>;
 export type ProfileHash =
@@ -345,15 +345,16 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly email: CodecTypes['pg/text@1']['output'];
       readonly emailVerificationCodeHash: CodecTypes['pg/text@1']['output'] | null;
-      readonly emailVerificationExpiresAt: Date | null;
-      readonly emailVerificationLastSentAt: Date | null;
+      readonly emailVerificationExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly emailVerificationLastSentAt:
+        CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly emailVerified: CodecTypes['pg/bool@1']['output'];
       readonly fullName: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly passwordHash: CodecTypes['pg/text@1']['output'];
       readonly passwordResetCodeHash: CodecTypes['pg/text@1']['output'] | null;
-      readonly passwordResetExpiresAt: Date | null;
-      readonly passwordResetLastSentAt: Date | null;
+      readonly passwordResetExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly passwordResetLastSentAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly phone: CodecTypes['pg/text@1']['output'];
       readonly referralCode: CodecTypes['pg/text@1']['output'];
       readonly referredById: CodecTypes['pg/text@1']['output'] | null;
@@ -492,15 +493,15 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly email: CodecTypes['pg/text@1']['input'];
       readonly emailVerificationCodeHash: CodecTypes['pg/text@1']['input'] | null;
-      readonly emailVerificationExpiresAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
-      readonly emailVerificationLastSentAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
+      readonly emailVerificationExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly emailVerificationLastSentAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly emailVerified: CodecTypes['pg/bool@1']['input'];
       readonly fullName: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly passwordHash: CodecTypes['pg/text@1']['input'];
       readonly passwordResetCodeHash: CodecTypes['pg/text@1']['input'] | null;
-      readonly passwordResetExpiresAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
-      readonly passwordResetLastSentAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
+      readonly passwordResetExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly passwordResetLastSentAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly phone: CodecTypes['pg/text@1']['input'];
       readonly referralCode: CodecTypes['pg/text@1']['input'];
       readonly referredById: CodecTypes['pg/text@1']['input'] | null;
@@ -639,15 +640,16 @@ export type StorageColumnTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly email: CodecTypes['pg/text@1']['output'];
       readonly emailVerificationCodeHash: CodecTypes['pg/text@1']['output'] | null;
-      readonly emailVerificationExpiresAt: Date | null;
-      readonly emailVerificationLastSentAt: Date | null;
+      readonly emailVerificationExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly emailVerificationLastSentAt:
+        CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly emailVerified: CodecTypes['pg/bool@1']['output'];
       readonly fullName: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly passwordHash: CodecTypes['pg/text@1']['output'];
       readonly passwordResetCodeHash: CodecTypes['pg/text@1']['output'] | null;
-      readonly passwordResetExpiresAt: Date | null;
-      readonly passwordResetLastSentAt: Date | null;
+      readonly passwordResetExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly passwordResetLastSentAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly phone: CodecTypes['pg/text@1']['output'];
       readonly referralCode: CodecTypes['pg/text@1']['output'];
       readonly referredById: CodecTypes['pg/text@1']['output'] | null;
@@ -786,15 +788,15 @@ export type StorageColumnInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly email: CodecTypes['pg/text@1']['input'];
       readonly emailVerificationCodeHash: CodecTypes['pg/text@1']['input'] | null;
-      readonly emailVerificationExpiresAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
-      readonly emailVerificationLastSentAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
+      readonly emailVerificationExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly emailVerificationLastSentAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly emailVerified: CodecTypes['pg/bool@1']['input'];
       readonly fullName: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly passwordHash: CodecTypes['pg/text@1']['input'];
       readonly passwordResetCodeHash: CodecTypes['pg/text@1']['input'] | null;
-      readonly passwordResetExpiresAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
-      readonly passwordResetLastSentAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
+      readonly passwordResetExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly passwordResetLastSentAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly phone: CodecTypes['pg/text@1']['input'];
       readonly referralCode: CodecTypes['pg/text@1']['input'];
       readonly referredById: CodecTypes['pg/text@1']['input'] | null;
@@ -951,15 +953,15 @@ export namespace Models {
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     email: CodecTypes['pg/text@1']['output'];
     emailVerificationCodeHash: CodecTypes['pg/text@1']['output'] | null;
-    emailVerificationExpiresAt: Date | null;
-    emailVerificationLastSentAt: Date | null;
+    emailVerificationExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    emailVerificationLastSentAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     emailVerified: CodecTypes['pg/bool@1']['output'];
     fullName: CodecTypes['pg/text@1']['output'];
     id: CodecTypes['pg/text@1']['output'];
     passwordHash: CodecTypes['pg/text@1']['output'];
     passwordResetCodeHash: CodecTypes['pg/text@1']['output'] | null;
-    passwordResetExpiresAt: Date | null;
-    passwordResetLastSentAt: Date | null;
+    passwordResetExpiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    passwordResetLastSentAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     phone: CodecTypes['pg/text@1']['output'];
     referralCode: CodecTypes['pg/text@1']['output'];
     referredById: CodecTypes['pg/text@1']['output'] | null;
@@ -1892,16 +1894,14 @@ type ContractBase = Omit<
                 };
                 readonly emailVerificationExpiresAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: true;
-                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly emailVerificationLastSentAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: true;
-                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly emailVerified: {
@@ -1940,16 +1940,14 @@ type ContractBase = Omit<
                 };
                 readonly passwordResetExpiresAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: true;
-                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly passwordResetLastSentAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: true;
-                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly phone: {
@@ -2908,16 +2906,14 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-date@1';
-                  readonly typeParams: { readonly precision: 3 };
+                  readonly codecId: 'pg/timestamptz-temporal@1';
                 };
               };
               readonly emailVerificationLastSentAt: {
                 readonly nullable: true;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-date@1';
-                  readonly typeParams: { readonly precision: 3 };
+                  readonly codecId: 'pg/timestamptz-temporal@1';
                 };
               };
               readonly emailVerified: {
@@ -2944,16 +2940,14 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-date@1';
-                  readonly typeParams: { readonly precision: 3 };
+                  readonly codecId: 'pg/timestamptz-temporal@1';
                 };
               };
               readonly passwordResetLastSentAt: {
                 readonly nullable: true;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-date@1';
-                  readonly typeParams: { readonly precision: 3 };
+                  readonly codecId: 'pg/timestamptz-temporal@1';
                 };
               };
               readonly phone: {

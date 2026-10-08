@@ -1,9 +1,14 @@
+
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import crypto from "crypto";
 import { or } from "@prisma/orm-postgres/orm-client";
 
 import { db } from "@/src/prisma/db";
+
+import { sendVerificationEmail } from "@/src/lib/email";
+import { generateEmailCode, hashEmailCode } from "@/src/lib/email-code";
 
 const registerSchema = z
   .object({
@@ -55,7 +60,8 @@ const registerSchema = z
       .optional(),
   })
   .refine(
-    (data) => data.password === data.confirmPassword,
+    (data) =>
+      data.password === data.confirmPassword,
     {
       message: "Passwords do not match",
       path: ["confirmPassword"],
@@ -69,27 +75,34 @@ function generateReferralCode(username: string) {
     .slice(0, 4)
     .padEnd(4, "X");
 
-  const random = Math.floor(
-    100000 + Math.random() * 900000
+  const random = crypto.randomInt(
+    100000,
+    1000000
   );
 
   return `${prefix}${random}`;
 }
 
-async function createUniqueReferralCode(username: string) {
+async function createUniqueReferralCode(
+  username: string
+) {
   for (let attempt = 0; attempt < 10; attempt++) {
-    const referralCode = generateReferralCode(username);
+    const referralCode =
+      generateReferralCode(username);
 
-    const existing = await db.orm.public.User
-      .where({ referralCode })
-      .first();
+    const existing =
+      await db.orm.public.User
+        .where({ referralCode })
+        .first();
 
     if (!existing) {
       return referralCode;
     }
   }
 
-  throw new Error("Unable to generate referral code");
+  throw new Error(
+    "Unable to generate referral code"
+  );
 }
 
 export async function POST(request: Request) {
@@ -98,20 +111,24 @@ export async function POST(request: Request) {
 
     const data = registerSchema.parse(body);
 
-    const username = data.username.toLowerCase();
-    const email = data.email.toLowerCase();
+    const username =
+      data.username.toLowerCase();
+
+    const email =
+      data.email.toLowerCase();
+
     const phone = data.phone.trim();
 
-    // FIXED: Use the imported `or` helper instead of `u.or`
-    const existing = await db.orm.public.User
-      .where((u) =>
-        or(
-          u.username.eq(username),
-          u.email.eq(email),
-          u.phone.eq(phone)
+    const existing =
+      await db.orm.public.User
+        .where((u) =>
+          or(
+            u.username.eq(username),
+            u.email.eq(email),
+            u.phone.eq(phone)
+          )
         )
-      )
-      .first();
+        .first();
 
     if (existing) {
       let error = "Account already exists";
@@ -129,18 +146,22 @@ export async function POST(request: Request) {
           success: false,
           error,
         },
-        {
-          status: 409,
-        }
+        { status: 409 }
       );
     }
 
-    let referredById: string | undefined;
+    let referredById:
+      | string
+      | undefined;
 
     if (data.referralCode) {
-      const referrer = await db.orm.public.User
-        .where({ referralCode: data.referralCode.toUpperCase() })
-        .first();
+      const referrer =
+        await db.orm.public.User
+          .where({
+            referralCode:
+              data.referralCode.toUpperCase(),
+          })
+          .first();
 
       if (!referrer) {
         return NextResponse.json(
@@ -148,9 +169,7 @@ export async function POST(request: Request) {
             success: false,
             error: "Invalid referral code",
           },
-          {
-            status: 400,
-          }
+          { status: 400 }
         );
       }
 
@@ -158,69 +177,108 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             success: false,
-            error: "This referral account is not active",
+            error:
+              "This referral account is not active",
           },
-          {
-            status: 400,
-          }
+          { status: 400 }
         );
       }
 
       referredById = referrer.id;
     }
 
-    const passwordHash = await bcrypt.hash(
-      data.password,
-      12
-    );
+    const passwordHash =
+      await bcrypt.hash(data.password, 12);
 
     const referralCode =
       await createUniqueReferralCode(username);
 
-    const user = await db.orm.public.User.create({
-      fullName: data.fullName,
-      username,
-      email,
-      phone,
-      passwordHash,
-      referralCode,
-      referredById,
-    });
+    const verificationCode =
+      generateEmailCode();
+
+    const verificationCodeHash =
+      hashEmailCode(verificationCode);
+
+    const verificationExpiresAt =
+      new Date(Date.now() + 15 * 60 * 1000);
+
+    const user =
+      await db.orm.public.User.create({
+        fullName: data.fullName,
+        username,
+        email,
+        phone,
+        passwordHash,
+        referralCode,
+        referredById,
+
+        emailVerified: false,
+
+        emailVerificationCodeHash:
+          verificationCodeHash,
+
+        emailVerificationExpiresAt:
+          verificationExpiresAt,
+
+        emailVerificationLastSentAt:
+          new Date(),
+      });
+
+    /*
+     * Send email after account creation.
+     *
+     * If SMTP temporarily fails, the account still exists
+     * and the user can use "Resend verification code".
+     */
+    try {
+      await sendVerificationEmail({
+        email: user.email,
+        fullName: user.fullName,
+        code: verificationCode,
+      });
+    } catch (emailError) {
+      console.error(
+        "REGISTRATION_EMAIL_ERROR:",
+        emailError
+      );
+    }
 
     return NextResponse.json(
       {
         success: true,
-        message: "Account created successfully",
+        message:
+          "Account created. Please verify your email.",
         userId: user.id,
         referralCode: user.referralCode,
+        email: user.email,
+        requiresEmailVerification: true,
       },
-      {
-        status: 201,
-      }
+      { status: 201 }
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {
           success: false,
-          error: error.issues[0]?.message ?? "Invalid data",
+          error:
+            error.issues[0]?.message ??
+            "Invalid data",
         },
-        {
-          status: 400,
-        }
+        { status: 400 }
       );
     }
 
-    console.error("REGISTER_ERROR:", error);
+    console.error(
+      "REGISTER_ERROR:",
+      error
+    );
 
     return NextResponse.json(
       {
         success: false,
         error: "Unable to create account",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }

@@ -19,21 +19,26 @@ export async function GET() {
 
   return NextResponse.json({
     success: true,
-    user: {
-      id: user.id,
-      fullName: user.fullName,
-      username: user.username,
-      email: user.email,
-      phone: user.phone,
-      role: user.role,
-      status: user.status,
-      referralCode: user.referralCode,
-      balance: user.balance.toString(),
-      totalDeposit: user.totalDeposit.toString(),
-      totalWithdrawal: user.totalWithdrawal.toString(),
-      totalReward: user.totalReward.toString(),
-      totalCommission: user.totalCommission.toString(),
-      createdAt: user.createdAt,
-    },
+   user: {
+  id: user.id,
+  fullName: user.fullName,
+  username: user.username,
+  email: user.email,
+  phone: user.phone,
+  role: user.role,
+  status: user.status,
+
+  emailVerified: user.emailVerified,
+
+  referralCode: user.referralCode,
+
+  balance: user.balance.toString(),
+  totalDeposit: user.totalDeposit.toString(),
+  totalWithdrawal: user.totalWithdrawal.toString(),
+  totalReward: user.totalReward.toString(),
+  totalCommission: user.totalCommission.toString(),
+
+  createdAt: user.createdAt,
+},
   });
 }

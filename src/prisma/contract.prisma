@@ -53,43 +53,39 @@ enum SupportStatus {
 }
 
 model User {
-  id           String     @id @default(cuid(2))
+  id           String @id @default(cuid(2))
   fullName     String
-  username     String     @unique
-  email        String     @unique
-  phone        String     @unique
+  username     String @unique
+  email        String @unique
+  phone        String
+
   passwordHash String
 
-  role   UserRole   @default(USER)
-  status UserStatus @default(ACTIVE)
+  role         UserRole   @default(USER)
+  status       UserStatus @default(ACTIVE)
 
-  balance         BigInt @default(0)
-  totalDeposit    BigInt @default(0)
-  totalWithdrawal BigInt @default(0)
-  totalReward     BigInt @default(0)
-  totalCommission BigInt @default(0)
+  balance          BigInt @default(0)
+  totalDeposit     BigInt @default(0)
+  totalWithdrawal  BigInt @default(0)
+  totalReward      BigInt @default(0)
+  totalCommission  BigInt @default(0)
 
   referralCode String @unique
   referredById String?
 
-  referredBy User?  @relation("UserReferral", fields: [referredById], references: [id])
-  referrals  User[] @relation("UserReferral")
+  emailVerified Boolean @default(false)
 
-  investments Investment[]
-  deposits    Deposit[]
-  withdrawals Withdrawal[]
-  commissions Commission[]
-  transactions Transaction[]
+  emailVerificationCodeHash    String?
+  emailVerificationExpiresAt   TimestamptzJsDate(3)?
+  emailVerificationLastSentAt  TimestamptzJsDate(3)?
 
-  supportTickets SupportTicket[]
-  notifications  Notification[]
+
+  passwordResetCodeHash        String?
+  passwordResetExpiresAt       TimestamptzJsDate(3)?
+  passwordResetLastSentAt      TimestamptzJsDate(3)?
 
   createdAt DateTime @default(now())
   updatedAt temporal.updatedAt()
-
-  @@index([referredById])
-  @@index([status])
-  @@index([createdAt])
 }
 
 model Plan {

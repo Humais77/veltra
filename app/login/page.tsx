@@ -61,9 +61,25 @@ function LoginForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Invalid username or password.");
-        return;
-      }
+  if (
+    data.code === "EMAIL_NOT_VERIFIED"
+  ) {
+    router.push(
+      `/verify-email?email=${encodeURIComponent(
+        data.email
+      )}`
+    );
+
+    return;
+  }
+
+  setError(
+    data.error ||
+      "Invalid username or password."
+  );
+
+  return;
+}
 
       if (data.role === "ADMIN") {
         router.replace("/admin");
@@ -173,6 +189,14 @@ function LoginForm() {
                 </button>
               </div>
             </div>
+            <div className="mt-2 text-right">
+  <Link
+    href="/forgot-password"
+    className="text-xs font-medium text-pink-400 hover:text-pink-300"
+  >
+    Forgot password?
+  </Link>
+</div>
 
             <button
               type="submit"

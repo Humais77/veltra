@@ -1323,6 +1323,40 @@
                   "kind": "scalar"
                 }
               },
+              "emailVerificationCodeHash": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "emailVerificationExpiresAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "emailVerificationLastSentAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "emailVerified": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
               "fullName": {
                 "nullable": false,
                 "type": {
@@ -1342,6 +1376,33 @@
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
+                }
+              },
+              "passwordResetCodeHash": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "passwordResetExpiresAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "passwordResetLastSentAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
                 }
               },
               "phone": {
@@ -1434,144 +1495,7 @@
                 }
               }
             },
-            "relations": {
-              "commissions": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Commission",
-                  "namespace": "public"
-                }
-              },
-              "deposits": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Deposit",
-                  "namespace": "public"
-                }
-              },
-              "investments": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Investment",
-                  "namespace": "public"
-                }
-              },
-              "notifications": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Notification",
-                  "namespace": "public"
-                }
-              },
-              "referrals": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "referredById"
-                  ]
-                },
-                "to": {
-                  "model": "User",
-                  "namespace": "public"
-                }
-              },
-              "referredBy": {
-                "cardinality": "N:1",
-                "nullable": true,
-                "on": {
-                  "localFields": [
-                    "referredById"
-                  ],
-                  "targetFields": [
-                    "id"
-                  ]
-                },
-                "to": {
-                  "model": "User",
-                  "namespace": "public"
-                }
-              },
-              "supportTickets": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "SupportTicket",
-                  "namespace": "public"
-                }
-              },
-              "transactions": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Transaction",
-                  "namespace": "public"
-                }
-              },
-              "withdrawals": {
-                "cardinality": "1:N",
-                "on": {
-                  "localFields": [
-                    "id"
-                  ],
-                  "targetFields": [
-                    "userId"
-                  ]
-                },
-                "to": {
-                  "model": "Withdrawal",
-                  "namespace": "public"
-                }
-              }
-            },
+            "relations": {},
             "storage": {
               "fields": {
                 "balance": {
@@ -1583,6 +1507,18 @@
                 "email": {
                   "column": "email"
                 },
+                "emailVerificationCodeHash": {
+                  "column": "emailVerificationCodeHash"
+                },
+                "emailVerificationExpiresAt": {
+                  "column": "emailVerificationExpiresAt"
+                },
+                "emailVerificationLastSentAt": {
+                  "column": "emailVerificationLastSentAt"
+                },
+                "emailVerified": {
+                  "column": "emailVerified"
+                },
                 "fullName": {
                   "column": "fullName"
                 },
@@ -1591,6 +1527,15 @@
                 },
                 "passwordHash": {
                   "column": "passwordHash"
+                },
+                "passwordResetCodeHash": {
+                  "column": "passwordResetCodeHash"
+                },
+                "passwordResetExpiresAt": {
+                  "column": "passwordResetExpiresAt"
+                },
+                "passwordResetLastSentAt": {
+                  "column": "passwordResetLastSentAt"
                 },
                 "phone": {
                   "column": "phone"
@@ -2809,6 +2754,36 @@
                   "dataType": "pg/text",
                   "nullable": false
                 },
+                "emailVerificationCodeHash": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "emailVerificationExpiresAt": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "emailVerificationLastSentAt": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "emailVerified": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nullable": false
+                },
                 "fullName": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
@@ -2823,6 +2798,27 @@
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "nullable": false
+                },
+                "passwordResetCodeHash": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "passwordResetExpiresAt": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "passwordResetLastSentAt": {
+                  "codecId": "pg/timestamptz-date@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": true,
+                  "typeParams": {
+                    "precision": 3
+                  }
                 },
                 "phone": {
                   "codecId": "pg/text@1",
@@ -2916,50 +2912,8 @@
                   "nullable": false
                 }
               },
-              "foreignKeys": [
-                {
-                  "source": {
-                    "columns": [
-                      "referredById"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "User"
-                  },
-                  "target": {
-                    "columns": [
-                      "id"
-                    ],
-                    "namespaceId": "public",
-                    "tableName": "User"
-                  }
-                }
-              ],
-              "indexes": [
-                {
-                  "columns": [
-                    "createdAt"
-                  ],
-                  "name": "User_createdAt_idx_9575dbd7",
-                  "prefix": "User_createdAt_idx",
-                  "unique": false
-                },
-                {
-                  "columns": [
-                    "referredById"
-                  ],
-                  "name": "User_referredById_idx_9cd6e9b3",
-                  "prefix": "User_referredById_idx",
-                  "unique": false
-                },
-                {
-                  "columns": [
-                    "status"
-                  ],
-                  "name": "User_status_idx_e98638ab",
-                  "prefix": "User_status_idx",
-                  "unique": false
-                }
-              ],
+              "foreignKeys": [],
+              "indexes": [],
               "primaryKey": {
                 "columns": [
                   "id"
@@ -2974,11 +2928,6 @@
                 {
                   "columns": [
                     "email"
-                  ]
-                },
-                {
-                  "columns": [
-                    "phone"
                   ]
                 },
                 {
@@ -3202,7 +3151,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "7a6f7b4f9a5818c92912c13b083c18a0d583db7a6a767d874c34fd4584f1ed40"
+    "storageHash": "1d5ece5cac6be7c40bde50c936e4ca006ee766e16c65fd33eb95082d5e747650"
   },
   "execution": {
     "executionHash": "9f7677a22daf1ec819cef470e09a334b686608bf53a2830260365ca45155bd28",

@@ -93,10 +93,10 @@ export default function RegisterPage() {
       }
 
       router.push(
-        `/login?registered=1&username=${encodeURIComponent(
-          form.username.toLowerCase()
-        )}`
-      );
+  `/verify-email?email=${encodeURIComponent(
+    form.email.toLowerCase()
+  )}`
+);
     } catch {
       setError(
         "Something went wrong. Please try again."
