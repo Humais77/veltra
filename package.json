@@ -6,12 +6,24 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "contract:emit": "prisma contract emit"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "@prisma/orm-postgres": "^8.0.0-rc.16",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.6",
+    "jose": "^6.2.12",
+    "lucide-react": "^1.52.0",
     "next": "16.4.0",
+    "pg": "^8.23.1",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.89.0",
+    "recharts": "^3.10.1",
+    "sonner": "^2.0.8",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
