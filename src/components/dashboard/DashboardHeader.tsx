@@ -1,46 +1,47 @@
-"use client";
+// src/components/dashboard/Header.tsx
+import React from "react";
 
-import {
-  Bell,
-  Menu,
-} from "lucide-react";
+interface DashboardHeaderProps {
+  userName: string;
+  pageTitle?: string; // Optional: defaults to "Welcome, {userName}"
+  subtitle?: string;  // Optional: defaults to "Your account overview — live."
+  isOnline?: boolean;
+}
 
 export default function DashboardHeader({
-  fullName,
-  username,
-}: {
-  fullName: string;
-  username: string;
-}) {
+  userName,
+  pageTitle,
+  subtitle = "Your account overview — live.",
+  isOnline = true,
+}: DashboardHeaderProps) {
+  // Use provided pageTitle or fallback to the welcome message
+  const displayTitle = pageTitle || `Welcome, ${userName}`;
+
   return (
-    <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-white/10 bg-[#050814]/90 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between">
       <div>
-        <p className="text-xs text-gray-500">
-          Welcome back
+        <h2 className="text-2xl font-black uppercase tracking-tight sm:text-3xl">
+          {displayTitle}
+        </h2>
+        <p className="mt-1 text-xs text-gray-500">
+          {subtitle}
         </p>
-
-        <h1 className="text-lg font-bold">
-          {fullName}
-        </h1>
       </div>
 
-      <div className="flex items-center gap-4">
-        <button className="relative rounded-xl border border-white/10 bg-white/[0.03] p-3 text-gray-400 hover:text-white">
-          <Bell size={19} />
-
-          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-pink-500" />
-        </button>
-
-        <div className="hidden text-right sm:block">
-          <p className="text-sm font-semibold">
-            @{username}
-          </p>
-
-          <p className="text-xs text-gray-500">
-            Member
-          </p>
-        </div>
+      <div className="flex items-center gap-2 rounded-full border border-pink-500/30 bg-[#080b1f] px-3 py-1.5 shadow-[0_0_10px_rgba(236,72,153,0.1)]">
+        <div
+          className={`h-2 w-2 rounded-full ${
+            isOnline ? "animate-pulse bg-pink-400" : "bg-gray-500"
+          }`}
+        />
+        <span
+          className={`text-[10px] font-bold tracking-widest uppercase ${
+            isOnline ? "text-pink-400" : "text-gray-500"
+          }`}
+        >
+          {isOnline ? "Online" : "Offline"}
+        </span>
       </div>
-    </header>
+    </div>
   );
 }

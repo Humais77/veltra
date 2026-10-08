@@ -25,11 +25,6 @@ export default async function DashboardLayout({
       <DashboardSidebar />
 
       <div className="lg:pl-72">
-        <DashboardHeader
-          fullName={user.fullName}
-          username={user.username}
-        />
-
         <main className="min-h-[calc(100vh-80px)] p-4 sm:p-6 lg:p-8">
           {children}
         </main>
