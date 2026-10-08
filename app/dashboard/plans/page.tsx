@@ -7,13 +7,55 @@ import {
   Wallet,
 } from "lucide-react";
 
+import { getCurrentUser } from "@/src/lib/auth";
 import { db } from "@/src/prisma/db";
 
 export default async function PlansPage() {
-  const plans = await db.orm.public.Plan
-    .where({ isActive: true })
-    .orderBy((plan) => plan.investmentAmount.asc())
-    .all();
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return null;
+  }
+
+  /*
+   * Find plans where the user already
+   * has an active investment.
+   */
+  const activeInvestments =
+    await db.orm.public.Investment
+      .where({
+        userId: user.id,
+        status: "ACTIVE",
+      })
+      .all();
+
+  const investedPlanIds = new Set(
+    activeInvestments.map(
+      (investment) => investment.planId
+    )
+  );
+
+  /*
+   * Get active plans only.
+   */
+  const activePlans =
+    await db.orm.public.Plan
+      .where({
+        isActive: true,
+      })
+      .orderBy((plan) =>
+        plan.investmentAmount.asc()
+      )
+      .all();
+
+  /*
+   * Remove plans that the user
+   * already has an active investment in.
+   */
+  const plans = activePlans.filter(
+    (plan) =>
+      !investedPlanIds.has(plan.id)
+  );
 
   return (
     <main className="min-h-screen px-4 py-6 sm:px-6 lg:px-10">
@@ -21,7 +63,10 @@ export default async function PlansPage() {
         <div className="mb-10">
           <div className="mb-3 flex items-center gap-2 text-pink-400">
             <Sparkles size={18} />
-            <span className="text-sm font-semibold">Investment Plans</span>
+
+            <span className="text-sm font-semibold">
+              Investment Plans
+            </span>
           </div>
 
           <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
@@ -29,8 +74,9 @@ export default async function PlansPage() {
           </h1>
 
           <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-400">
-            Select an investment plan that fits your budget and start growing
-            your balance with Veltra.
+            Select an investment plan that fits
+            your budget and start growing your
+            balance with Veltra.
           </p>
         </div>
 
@@ -52,11 +98,13 @@ export default async function PlansPage() {
                     </div>
 
                     <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-                      Active
+                      Available
                     </span>
                   </div>
 
-                  <h2 className="mt-6 text-xl font-bold">{plan.name}</h2>
+                  <h2 className="mt-6 text-xl font-bold">
+                    {plan.name}
+                  </h2>
 
                   <div className="mt-5">
                     <p className="text-xs uppercase tracking-wider text-gray-500">
@@ -64,7 +112,10 @@ export default async function PlansPage() {
                     </p>
 
                     <p className="mt-1 text-3xl font-black">
-                      Rs. {Number(plan.investmentAmount).toLocaleString("en-PK")}
+                      Rs.{" "}
+                      {Number(
+                        plan.investmentAmount
+                      ).toLocaleString("en-PK")}
                     </p>
                   </div>
 
@@ -75,7 +126,9 @@ export default async function PlansPage() {
                       label="Reward"
                       value={`Rs. ${Number(
                         plan.rewardAmount
-                      ).toLocaleString("en-PK")}`}
+                      ).toLocaleString(
+                        "en-PK"
+                      )}`}
                     />
 
                     <Feature
@@ -92,7 +145,11 @@ export default async function PlansPage() {
                         size={17}
                         className="text-emerald-400"
                       />
-                      <span>2% direct referral commission</span>
+
+                      <span>
+                        2% direct referral
+                        commission
+                      </span>
                     </div>
 
                     <div className="flex items-center gap-3 text-sm text-gray-300">
@@ -100,7 +157,10 @@ export default async function PlansPage() {
                         size={17}
                         className="text-emerald-400"
                       />
-                      <span>Secure account dashboard</span>
+
+                      <span>
+                        Secure account dashboard
+                      </span>
                     </div>
                   </div>
 
@@ -109,6 +169,7 @@ export default async function PlansPage() {
                     className="mt-7 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-600 px-5 py-3.5 text-sm font-bold transition hover:opacity-90"
                   >
                     Invest in This Plan
+
                     <ArrowRight size={17} />
                   </Link>
                 </div>
@@ -130,8 +191,13 @@ function Feature({
 }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-500">{label}</span>
-      <span className="font-semibold text-white">{value}</span>
+      <span className="text-sm text-gray-500">
+        {label}
+      </span>
+
+      <span className="font-semibold text-white">
+        {value}
+      </span>
     </div>
   );
 }
@@ -139,11 +205,28 @@ function Feature({
 function EmptyState() {
   return (
     <div className="rounded-3xl border border-white/10 bg-[#080b1f] p-12 text-center">
-      <Clock3 className="mx-auto text-gray-500" size={35} />
-      <h2 className="mt-4 text-xl font-bold">No plans available</h2>
+      <Clock3
+        className="mx-auto text-gray-500"
+        size={35}
+      />
+
+      <h2 className="mt-4 text-xl font-bold">
+        No plans available
+      </h2>
+
       <p className="mt-2 text-sm text-gray-500">
-        Investment plans will appear here when they become available.
+        You have already invested in all
+        currently available plans, or there
+        are no active plans right now.
       </p>
+
+      <Link
+        href="/dashboard/investments"
+        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-600 px-5 py-3 text-sm font-bold"
+      >
+        View My Investments
+        <ArrowRight size={17} />
+      </Link>
     </div>
   );
 }

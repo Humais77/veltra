@@ -1,62 +1,105 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+
 import { getCurrentUser } from "@/src/lib/auth";
 import { db } from "@/src/prisma/db";
 import { serializeBigInts } from "@/src/lib/money";
 
 const schema = z.object({
-  fullName: z.string().min(2).max(100),
-  phone: z.string().min(10).max(20),
-  email: z.string().email(),
+  fullName: z
+    .string()
+    .min(2)
+    .max(100),
+
+  username: z
+    .string()
+    .min(3)
+    .max(30)
+    .regex(
+      /^[a-zA-Z0-9_]+$/,
+      "Username can only contain letters, numbers and underscores."
+    ),
+
+  phone: z
+    .string()
+    .min(10)
+    .max(20),
 });
 
 export async function GET() {
-  const user = await getCurrentUser();
+  const user =
+    await getCurrentUser();
 
   if (!user) {
     return NextResponse.json(
-      { error: "Unauthorized" },
+      {
+        error:
+          "Unauthorized",
+      },
       { status: 401 }
     );
   }
 
   return NextResponse.json({
-    id: user.id,
-    fullName: user.fullName,
-    username: user.username,
-    phone: user.phone,
-    email: user.email,
-    referralCode: user.referralCode,
-    role: user.role,
+    success: true,
+
+    user: {
+      id: user.id,
+      fullName: user.fullName,
+      username: user.username,
+      email: user.email,
+      phone: user.phone,
+      referralCode:
+        user.referralCode,
+      role: user.role,
+    },
   });
 }
 
-export async function PATCH(request: Request) {
+export async function PATCH(
+  request: Request
+) {
   try {
-    const user = await getCurrentUser();
+    const user =
+      await getCurrentUser();
 
     if (!user) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        {
+          error:
+            "Unauthorized",
+        },
         { status: 401 }
       );
     }
 
-    const data = schema.parse(
-      await request.json()
-    );
+    const data =
+      schema.parse(
+        await request.json()
+      );
 
-    const emailOwner =
-      await db.orm.public.User.first({
-        email: data.email,
-      });
+    const normalizedUsername =
+      data.username
+        .trim()
+        .toLowerCase();
+
+    const usernameOwner =
+      await db.orm.public.User.first(
+        {
+          username:
+            normalizedUsername,
+        }
+      );
 
     if (
-      emailOwner &&
-      emailOwner.id !== user.id
+      usernameOwner &&
+      usernameOwner.id !== user.id
     ) {
       return NextResponse.json(
-        { error: "Email already exists" },
+        {
+          error:
+            "Username already exists.",
+        },
         { status: 409 }
       );
     }
@@ -71,7 +114,10 @@ export async function PATCH(request: Request) {
       phoneOwner.id !== user.id
     ) {
       return NextResponse.json(
-        { error: "Phone already exists" },
+        {
+          error:
+            "Phone already exists.",
+        },
         { status: 409 }
       );
     }
@@ -80,17 +126,53 @@ export async function PATCH(request: Request) {
       await db.orm.public.User
         .where({ id: user.id })
         .update({
-          fullName: data.fullName,
-          phone: data.phone,
-          email: data.email,
+          fullName:
+            data.fullName.trim(),
+
+          username:
+            normalizedUsername,
+
+          phone:
+            data.phone.trim(),
         });
+        if (!updated) {
+  return NextResponse.json(
+    { error: "Unable to update profile." },
+    { status: 500 }
+  );
+}
+
+
+    return NextResponse.json({
+      success: true,
+      message:
+        "Profile updated successfully.",
+      user: {
+        id: updated.id ,
+        fullName:
+          updated.fullName,
+        username:
+          updated.username,
+        email:
+          updated.email,
+        phone:
+          updated.phone,
+        referralCode:
+          updated.referralCode,
+        role: updated.role,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "PROFILE_UPDATE_ERROR",
+      error
+    );
 
     return NextResponse.json(
-      serializeBigInts(updated)
-    );
-  } catch {
-    return NextResponse.json(
-      { error: "Invalid profile data" },
+      {
+        error:
+          "Invalid profile data.",
+      },
       { status: 400 }
     );
   }
