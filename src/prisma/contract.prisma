@@ -53,7 +53,7 @@ enum SupportStatus {
 }
 
 model User {
-  id           String     @id @default(cuid(1))
+  id           String     @id @default(cuid(2))
   fullName     String
   username     String     @unique
   email        String     @unique
@@ -93,7 +93,7 @@ model User {
 }
 
 model Plan {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   name String
 
@@ -113,7 +113,7 @@ model Plan {
 }
 
 model Investment {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
   planId String
@@ -137,7 +137,7 @@ model Investment {
 }
 
 model Deposit {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 
@@ -161,7 +161,7 @@ model Deposit {
 }
 
 model Withdrawal {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 
@@ -185,7 +185,7 @@ model Withdrawal {
 }
 
 model Commission {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId       String
   sourceUserId String
@@ -205,7 +205,7 @@ model Commission {
 }
 
 model Transaction {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 
@@ -224,7 +224,7 @@ model Transaction {
 }
 
 model PaymentMethod {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   name String
   type PaymentMethodType
@@ -240,7 +240,7 @@ model PaymentMethod {
 }
 
 model Rank {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   name String
 
@@ -257,7 +257,7 @@ model Rank {
 }
 
 model News {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   title String
   slug  String @unique
@@ -274,7 +274,7 @@ model News {
 }
 
 model SupportTicket {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 
@@ -293,7 +293,7 @@ model SupportTicket {
 }
 
 model Notification {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 

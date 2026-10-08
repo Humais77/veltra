@@ -23,6 +23,7 @@
     "react-hook-form": "^7.89.0",
     "recharts": "^3.10.1",
     "sonner": "^2.0.8",
+    "temporal-polyfill": "^1.0.5",
     "zod": "^4.6.5"
   },
   "devDependencies": {
