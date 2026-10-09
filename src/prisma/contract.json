@@ -108,6 +108,10 @@
             "codecId": "pg/text@1",
             "members": [
               {
+                "name": "SADAPAY",
+                "value": "SADAPAY"
+              },
+              {
                 "name": "EASYPAISA",
                 "value": "EASYPAISA"
               },
@@ -384,6 +388,13 @@
                   "plane": "domain"
                 }
               },
+              "planId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "screenshotUrl": {
                 "nullable": true,
                 "type": {
@@ -427,6 +438,22 @@
               }
             },
             "relations": {
+              "plan": {
+                "cardinality": "N:1",
+                "nullable": true,
+                "on": {
+                  "localFields": [
+                    "planId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Plan",
+                  "namespace": "public"
+                }
+              },
               "user": {
                 "cardinality": "N:1",
                 "nullable": false,
@@ -457,6 +484,9 @@
                 },
                 "method": {
                   "column": "method"
+                },
+                "planId": {
+                  "column": "planId"
                 },
                 "screenshotUrl": {
                   "column": "screenshotUrl"
@@ -964,6 +994,21 @@
               }
             },
             "relations": {
+              "deposits": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "planId"
+                  ]
+                },
+                "to": {
+                  "model": "Deposit",
+                  "namespace": "public"
+                }
+              },
               "investments": {
                 "cardinality": "1:N",
                 "on": {
@@ -1849,8 +1894,8 @@
             "Deposit": {
               "checks": [
                 {
-                  "expression": "\"method\" IN ('EASYPAISA', 'JAZZCASH', 'BANK', 'CRYPTO')",
-                  "name": "Deposit_method_check_6129be3a",
+                  "expression": "\"method\" IN ('SADAPAY', 'EASYPAISA', 'JAZZCASH', 'BANK', 'CRYPTO')",
+                  "name": "Deposit_method_check_82e2cb6b",
                   "prefix": "Deposit_method_check"
                 },
                 {
@@ -1889,6 +1934,11 @@
                     "namespaceId": "public",
                     "plane": "storage"
                   }
+                },
+                "planId": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
                 },
                 "screenshotUrl": {
                   "codecId": "pg/text@1",
@@ -1942,6 +1992,22 @@
                     "namespaceId": "public",
                     "tableName": "User"
                   }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "planId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Deposit"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Plan"
+                  }
                 }
               ],
               "indexes": [
@@ -1951,6 +2017,14 @@
                   ],
                   "name": "Deposit_createdAt_idx_9575dbd7",
                   "prefix": "Deposit_createdAt_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "planId"
+                  ],
+                  "name": "Deposit_planId_idx_5b32079a",
+                  "prefix": "Deposit_planId_idx",
                   "unique": false
                 },
                 {
@@ -2279,8 +2353,8 @@
             "PaymentMethod": {
               "checks": [
                 {
-                  "expression": "\"type\" IN ('EASYPAISA', 'JAZZCASH', 'BANK', 'CRYPTO')",
-                  "name": "PaymentMethod_type_check_b509fa96",
+                  "expression": "\"type\" IN ('SADAPAY', 'EASYPAISA', 'JAZZCASH', 'BANK', 'CRYPTO')",
+                  "name": "PaymentMethod_type_check_5f08a44c",
                   "prefix": "PaymentMethod_type_check"
                 }
               ],
@@ -2940,8 +3014,8 @@
             "Withdrawal": {
               "checks": [
                 {
-                  "expression": "\"method\" IN ('EASYPAISA', 'JAZZCASH', 'BANK', 'CRYPTO')",
-                  "name": "Withdrawal_method_check_6129be3a",
+                  "expression": "\"method\" IN ('SADAPAY', 'EASYPAISA', 'JAZZCASH', 'BANK', 'CRYPTO')",
+                  "name": "Withdrawal_method_check_82e2cb6b",
                   "prefix": "Withdrawal_method_check"
                 },
                 {
@@ -3096,6 +3170,7 @@
             "PaymentMethodType": {
               "kind": "valueSet",
               "values": [
+                "SADAPAY",
                 "EASYPAISA",
                 "JAZZCASH",
                 "BANK",
@@ -3151,7 +3226,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "1d5ece5cac6be7c40bde50c936e4ca006ee766e16c65fd33eb95082d5e747650"
+    "storageHash": "92533ba4124e06ea9c5e2648255965cd107fcc8fc3e48041c9ef1b159d9b4d5a"
   },
   "execution": {
     "executionHash": "9f7677a22daf1ec819cef470e09a334b686608bf53a2830260365ca45155bd28",

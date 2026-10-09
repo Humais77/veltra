@@ -40,6 +40,7 @@ enum TransactionType {
 }
 
 enum PaymentMethodType {
+  SADAPAY
   EASYPAISA
   JAZZCASH
   BANK
@@ -101,6 +102,7 @@ model Plan {
   isActive Boolean @default(true)
 
   investments Investment[]
+  deposits Deposit[]
 
   createdAt DateTime @default(now())
   updatedAt temporal.updatedAt()
@@ -136,6 +138,7 @@ model Deposit {
   id String @id @default(cuid(2))
 
   userId String
+   planId String?
 
   amount BigInt
 
@@ -147,6 +150,7 @@ model Deposit {
   status DepositStatus @default(PENDING)
 
   user User @relation(fields: [userId], references: [id])
+  plan Plan? @relation(fields: [planId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt temporal.updatedAt()

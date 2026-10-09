@@ -9,7 +9,7 @@ import {
   Loader2,
   Wallet,
 } from "lucide-react";
-
+import { useSearchParams } from "next/navigation";
 type Deposit = {
   id: string;
   amount: string;
@@ -26,6 +26,8 @@ export default function DepositPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
+  const searchParams = useSearchParams();
+const planId = searchParams.get("planId");
 
   async function loadDeposits() {
     try {
@@ -60,10 +62,11 @@ export default function DepositPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount,
-          method: "EASYPAISA",
-          transactionId,
-        }),
+  amount,
+  method: "EASYPAISA",
+  transactionId,
+  ...(planId ? { planId } : {}),
+}),
       });
 
       const data = await response.json();
@@ -141,6 +144,14 @@ export default function DepositPage() {
               <Unavailable label="Crypto" />
             </div>
           </div>
+          {planId && (
+  <div className="mt-5 rounded-2xl border border-purple-500/20 bg-purple-500/10 p-4 text-sm text-purple-200">
+    Your deposit is linked to your selected investment plan.
+    The investment will be created after the deposit is approved,
+    provided the plan is still active and the available balance
+    covers the investment amount.
+  </div>
+)}
 
           <form
             onSubmit={submitDeposit}

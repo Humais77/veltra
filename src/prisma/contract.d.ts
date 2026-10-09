@@ -18,7 +18,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'1d5ece5cac6be7c40bde50c936e4ca006ee766e16c65fd33eb95082d5e747650'>;
+  StorageHashBase<'92533ba4124e06ea9c5e2648255965cd107fcc8fc3e48041c9ef1b159d9b4d5a'>;
 export type ExecutionHash =
   ExecutionHashBase<'9f7677a22daf1ec819cef470e09a334b686608bf53a2830260365ca45155bd28'>;
 export type ProfileHash =
@@ -249,7 +249,8 @@ export type FieldOutputTypes = {
       readonly amount: CodecTypes['pg/int8@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
-      readonly method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly planId: CodecTypes['pg/text@1']['output'] | null;
       readonly screenshotUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
       readonly transactionId: CodecTypes['pg/text@1']['output'] | null;
@@ -293,7 +294,7 @@ export type FieldOutputTypes = {
       readonly instructions: CodecTypes['pg/text@1']['output'] | null;
       readonly isAvailable: CodecTypes['pg/bool@1']['output'];
       readonly name: CodecTypes['pg/text@1']['output'];
-      readonly type: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly type: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Plan: {
@@ -372,7 +373,7 @@ export type FieldOutputTypes = {
       readonly amount: CodecTypes['pg/int8@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
-      readonly method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly userId: CodecTypes['pg/text@1']['output'];
@@ -396,7 +397,8 @@ export type FieldInputTypes = {
       readonly amount: CodecTypes['pg/int8@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
-      readonly method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly planId: CodecTypes['pg/text@1']['input'] | null;
       readonly screenshotUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
       readonly transactionId: CodecTypes['pg/text@1']['input'] | null;
@@ -440,7 +442,7 @@ export type FieldInputTypes = {
       readonly instructions: CodecTypes['pg/text@1']['input'] | null;
       readonly isAvailable: CodecTypes['pg/bool@1']['input'];
       readonly name: CodecTypes['pg/text@1']['input'];
-      readonly type: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly type: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Plan: {
@@ -519,7 +521,7 @@ export type FieldInputTypes = {
       readonly amount: CodecTypes['pg/int8@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
-      readonly method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly userId: CodecTypes['pg/text@1']['input'];
@@ -543,7 +545,8 @@ export type StorageColumnTypes = {
       readonly amount: CodecTypes['pg/int8@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
-      readonly method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly planId: CodecTypes['pg/text@1']['output'] | null;
       readonly screenshotUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
       readonly transactionId: CodecTypes['pg/text@1']['output'] | null;
@@ -587,7 +590,7 @@ export type StorageColumnTypes = {
       readonly instructions: CodecTypes['pg/text@1']['output'] | null;
       readonly isAvailable: CodecTypes['pg/bool@1']['output'];
       readonly name: CodecTypes['pg/text@1']['output'];
-      readonly type: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly type: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Plan: {
@@ -666,7 +669,7 @@ export type StorageColumnTypes = {
       readonly amount: CodecTypes['pg/int8@1']['output'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
-      readonly method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly userId: CodecTypes['pg/text@1']['output'];
@@ -690,7 +693,8 @@ export type StorageColumnInputTypes = {
       readonly amount: CodecTypes['pg/int8@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
-      readonly method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly planId: CodecTypes['pg/text@1']['input'] | null;
       readonly screenshotUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
       readonly transactionId: CodecTypes['pg/text@1']['input'] | null;
@@ -734,7 +738,7 @@ export type StorageColumnInputTypes = {
       readonly instructions: CodecTypes['pg/text@1']['input'] | null;
       readonly isAvailable: CodecTypes['pg/bool@1']['input'];
       readonly name: CodecTypes['pg/text@1']['input'];
-      readonly type: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly type: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Plan: {
@@ -813,7 +817,7 @@ export type StorageColumnInputTypes = {
       readonly amount: CodecTypes['pg/int8@1']['input'];
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
-      readonly method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+      readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly userId: CodecTypes['pg/text@1']['input'];
@@ -839,14 +843,16 @@ export namespace Models {
     amount: CodecTypes['pg/int8@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     id: CodecTypes['pg/text@1']['output'];
-    method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+    method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+    planId: CodecTypes['pg/text@1']['output'] | null;
     screenshotUrl: CodecTypes['pg/text@1']['output'] | null;
     status: 'PENDING' | 'APPROVED' | 'REJECTED';
     transactionId: CodecTypes['pg/text@1']['output'] | null;
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     userId: CodecTypes['pg/text@1']['output'];
+    plan: public_Plan | null;
     user: public_User;
-    readonly [RelationKeys]?: 'user';
+    readonly [RelationKeys]?: 'plan' | 'user';
   };
   export type public_Investment = {
     amount: CodecTypes['pg/int8@1']['output'];
@@ -891,7 +897,7 @@ export namespace Models {
     instructions: CodecTypes['pg/text@1']['output'] | null;
     isAvailable: CodecTypes['pg/bool@1']['output'];
     name: CodecTypes['pg/text@1']['output'];
-    type: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+    type: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     readonly [RelationKeys]?: never;
   };
@@ -904,8 +910,9 @@ export namespace Models {
     name: CodecTypes['pg/text@1']['output'];
     rewardAmount: CodecTypes['pg/int8@1']['output'];
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    deposits: public_Deposit[];
     investments: public_Investment[];
-    readonly [RelationKeys]?: 'investments';
+    readonly [RelationKeys]?: 'deposits' | 'investments';
   };
   export type public_Rank = {
     bonus: CodecTypes['pg/int8@1']['output'];
@@ -979,7 +986,7 @@ export namespace Models {
     amount: CodecTypes['pg/int8@1']['output'];
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     id: CodecTypes['pg/text@1']['output'];
-    method: 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
+    method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
     status: 'PENDING' | 'APPROVED' | 'REJECTED';
     updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     userId: CodecTypes['pg/text@1']['output'];
@@ -1157,6 +1164,12 @@ type ContractBase = Omit<
                   readonly nullable: false;
                   readonly many: false;
                 };
+                readonly planId: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
                 readonly screenshotUrl: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
@@ -1202,6 +1215,12 @@ type ContractBase = Omit<
                   readonly unique: false;
                 },
                 {
+                  readonly name: 'Deposit_planId_idx_5b32079a';
+                  readonly prefix: 'Deposit_planId_idx';
+                  readonly columns: readonly ['planId'];
+                  readonly unique: false;
+                },
+                {
                   readonly name: 'Deposit_status_idx_e98638ab';
                   readonly prefix: 'Deposit_status_idx';
                   readonly columns: readonly ['status'];
@@ -1224,6 +1243,18 @@ type ContractBase = Omit<
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'User';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Deposit';
+                    readonly columns: readonly ['planId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Plan';
                     readonly columns: readonly ['id'];
                   };
                 },
@@ -2167,7 +2198,7 @@ type ContractBase = Omit<
             };
             readonly PaymentMethodType: {
               readonly kind: 'valueSet';
-              readonly values: readonly ['EASYPAISA', 'JAZZCASH', 'BANK', 'CRYPTO'];
+              readonly values: readonly ['SADAPAY', 'EASYPAISA', 'JAZZCASH', 'BANK', 'CRYPTO'];
             };
             readonly SupportStatus: {
               readonly kind: 'valueSet';
@@ -2336,6 +2367,10 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly planId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly screenshotUrl: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -2361,6 +2396,15 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly plan: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Plan' };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['planId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
               readonly user: {
                 readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
                 readonly cardinality: 'N:1';
@@ -2379,6 +2423,7 @@ type ContractBase = Omit<
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly id: { readonly column: 'id' };
                 readonly method: { readonly column: 'method' };
+                readonly planId: { readonly column: 'planId' };
                 readonly screenshotUrl: { readonly column: 'screenshotUrl' };
                 readonly status: { readonly column: 'status' };
                 readonly transactionId: { readonly column: 'transactionId' };
@@ -2686,6 +2731,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly deposits: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Deposit';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['planId'];
+                };
+              };
               readonly investments: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -3142,6 +3198,7 @@ type ContractBase = Omit<
           readonly PaymentMethodType: {
             readonly codecId: 'pg/text@1';
             readonly members: readonly [
+              { readonly name: 'SADAPAY'; readonly value: 'SADAPAY' },
               { readonly name: 'EASYPAISA'; readonly value: 'EASYPAISA' },
               { readonly name: 'JAZZCASH'; readonly value: 'JAZZCASH' },
               { readonly name: 'BANK'; readonly value: 'BANK' },
@@ -3191,6 +3248,57 @@ type ContractBase = Omit<
               { readonly name: 'REJECTED'; readonly value: 'REJECTED' },
             ];
           };
+        };
+        readonly enumMemberTypes?: {
+          readonly CommissionType: readonly [
+            { readonly name: 'INVESTMENT'; readonly value: 'INVESTMENT' },
+            { readonly name: 'PROFIT'; readonly value: 'PROFIT' },
+          ];
+          readonly DepositStatus: readonly [
+            { readonly name: 'PENDING'; readonly value: 'PENDING' },
+            { readonly name: 'APPROVED'; readonly value: 'APPROVED' },
+            { readonly name: 'REJECTED'; readonly value: 'REJECTED' },
+          ];
+          readonly InvestmentStatus: readonly [
+            { readonly name: 'ACTIVE'; readonly value: 'ACTIVE' },
+            { readonly name: 'COMPLETED'; readonly value: 'COMPLETED' },
+            { readonly name: 'CANCELLED'; readonly value: 'CANCELLED' },
+          ];
+          readonly PaymentMethodType: readonly [
+            { readonly name: 'SADAPAY'; readonly value: 'SADAPAY' },
+            { readonly name: 'EASYPAISA'; readonly value: 'EASYPAISA' },
+            { readonly name: 'JAZZCASH'; readonly value: 'JAZZCASH' },
+            { readonly name: 'BANK'; readonly value: 'BANK' },
+            { readonly name: 'CRYPTO'; readonly value: 'CRYPTO' },
+          ];
+          readonly SupportStatus: readonly [
+            { readonly name: 'OPEN'; readonly value: 'OPEN' },
+            { readonly name: 'IN_PROGRESS'; readonly value: 'IN_PROGRESS' },
+            { readonly name: 'CLOSED'; readonly value: 'CLOSED' },
+          ];
+          readonly TransactionType: readonly [
+            { readonly name: 'DEPOSIT'; readonly value: 'DEPOSIT' },
+            { readonly name: 'WITHDRAWAL'; readonly value: 'WITHDRAWAL' },
+            { readonly name: 'INVESTMENT'; readonly value: 'INVESTMENT' },
+            { readonly name: 'REWARD'; readonly value: 'REWARD' },
+            { readonly name: 'REFERRAL_COMMISSION'; readonly value: 'REFERRAL_COMMISSION' },
+            { readonly name: 'REFUND'; readonly value: 'REFUND' },
+            { readonly name: 'ADJUSTMENT'; readonly value: 'ADJUSTMENT' },
+          ];
+          readonly UserRole: readonly [
+            { readonly name: 'USER'; readonly value: 'USER' },
+            { readonly name: 'ADMIN'; readonly value: 'ADMIN' },
+          ];
+          readonly UserStatus: readonly [
+            { readonly name: 'ACTIVE'; readonly value: 'ACTIVE' },
+            { readonly name: 'BLOCKED'; readonly value: 'BLOCKED' },
+            { readonly name: 'SUSPENDED'; readonly value: 'SUSPENDED' },
+          ];
+          readonly WithdrawalStatus: readonly [
+            { readonly name: 'PENDING'; readonly value: 'PENDING' },
+            { readonly name: 'APPROVED'; readonly value: 'APPROVED' },
+            { readonly name: 'REJECTED'; readonly value: 'REJECTED' },
+          ];
         };
       };
     };

@@ -32,6 +32,11 @@ const navigation = [
     icon: WalletCards,
   },
   {
+    label: "My-Investments",
+    href: "/dashboard/investments",
+    icon: WalletCards,
+  },
+  {
     label: "Deposit",
     href: "/dashboard/deposit",
     icon: ArrowDownToLine,

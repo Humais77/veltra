@@ -9,17 +9,23 @@ export async function GET() {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        {
+          success: false,
+          error: "Unauthorized",
+        },
         { status: 401 }
       );
     }
 
-    const deposits = await db.orm.public.Deposit
-      .where({
-        userId: user.id,
-      })
-      .orderBy((deposit) => deposit.createdAt.desc())
-      .all();
+    const deposits =
+      await db.orm.public.Deposit
+        .where({
+          userId: user.id,
+        })
+        .orderBy((deposit) =>
+          deposit.createdAt.desc()
+        )
+        .all();
 
     return NextResponse.json({
       success: true,
@@ -33,6 +39,7 @@ export async function GET() {
 
     return NextResponse.json(
       {
+        success: false,
         error: "Failed to load deposit history",
       },
       { status: 500 }
