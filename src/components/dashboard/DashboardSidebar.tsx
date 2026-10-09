@@ -99,7 +99,7 @@ export default function DashboardSidebar({
             <div className="absolute right-1 top-1 h-1 w-1 rounded-full bg-white" />
           </div>
           <span className="text-2xl font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-white">
-            SunZee1
+            Veltra
           </span>
         </Link>
       </div>

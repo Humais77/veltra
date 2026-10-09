@@ -16,7 +16,7 @@ export default function LandingHeader() {
           </div>
           
           <span className="text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-white">
-            SunZee1
+            Veltra
           </span>
         </Link>
 

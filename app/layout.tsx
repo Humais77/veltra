@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SunZee1 - Solar Energy Investment Platform",
+  title: "Veltra - Solar Energy Investment Platform",
   description: "Invest in real solar power plants and earn daily profit from sunlight.",
 };
 

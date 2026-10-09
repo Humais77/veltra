@@ -8,24 +8,24 @@ export default function FaqSection() {
 
   const faqs = [
     {
-      question: "How do I download the SunZee1 app?",
-      answer: "You can download the SunZee1 app directly from our official website or through the App Store and Google Play Store. Simply search for 'SunZee1' and click install.",
+      question: "How do I download the Veltra app?",
+      answer: "You can download the Veltra app directly from our official website or through the App Store and Google Play Store. Simply search for 'Veltra' and click install.",
     },
     {
-      question: "How do I log in to SunZee1?",
+      question: "How do I log in to Veltra?",
       answer: "Click the 'Login' button in the top right corner of our website or open the app. Enter your registered email address and password to access your dashboard.",
     },
     {
-      question: "Is SunZee1 real or fake?",
-      answer: "SunZee1 is a verified, fully audited platform. We co-own and operate physical solar arrays globally and our PPAs are independently audited to ensure complete transparency.",
+      question: "Is Veltra real or fake?",
+      answer: "Veltra is a verified, fully audited platform. We co-own and operate physical solar arrays globally and our PPAs are independently audited to ensure complete transparency.",
     },
     {
-      question: "Is SunZee1 halal?",
+      question: "Is Veltra halal?",
       answer: "Yes. Our investment model is based on actual physical assets (solar panels) generating real-world utility (electricity). Returns are generated from legitimate commerce, not interest (riba).",
     },
     {
-      question: "Can I use SunZee1 in Pakistan?",
-      answer: "Yes, SunZee1 is accessible globally, including in Pakistan. You can register, invest, and withdraw earnings seamlessly using our supported payment gateways.",
+      question: "Can I use Veltra in Pakistan?",
+      answer: "Yes, Veltra is accessible globally, including in Pakistan. You can register, invest, and withdraw earnings seamlessly using our supported payment gateways.",
     },
     {
       question: "How do I deposit and withdraw?",

@@ -21,7 +21,7 @@ export default function ProtocolFlow() {
       id: "03",
       step: "STEP 3/4",
       title: "Profit to members",
-      description: "Revenue from electricity sales is shared with SunZee1 members every hour, based on investment size.",
+      description: "Revenue from electricity sales is shared with Veltra members every hour, based on investment size.",
       icon: <Network size={24} />,
     },
     {
