@@ -18,9 +18,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'92533ba4124e06ea9c5e2648255965cd107fcc8fc3e48041c9ef1b159d9b4d5a'>;
+  StorageHashBase<'acb30dfd625d9ae75646b7a7180132e344be78aaf1ac5fc2d72ce955ce69a6cf'>;
 export type ExecutionHash =
-  ExecutionHashBase<'9f7677a22daf1ec819cef470e09a334b686608bf53a2830260365ca45155bd28'>;
+  ExecutionHashBase<'3bc3cd275c52608b22bd36e9ca5b23f74b52f191f5daa88854b2a7ea6f7b1157'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -236,7 +236,8 @@ export type FieldOutputTypes = {
   readonly public: {
     readonly Commission: {
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
+      readonly eventKey: CodecTypes['pg/text@1']['output'] | null;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly investmentId: CodecTypes['pg/text@1']['output'] | null;
       readonly level: CodecTypes['pg/int4@1']['output'];
@@ -247,7 +248,7 @@ export type FieldOutputTypes = {
     };
     readonly Deposit: {
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly planId: CodecTypes['pg/text@1']['output'] | null;
@@ -259,18 +260,18 @@ export type FieldOutputTypes = {
     };
     readonly Investment: {
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly completedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly completedAt: Date | null;
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly planId: CodecTypes['pg/text@1']['output'];
       readonly reward: CodecTypes['pg/int8@1']['output'];
-      readonly startedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly startedAt: Date;
       readonly status: 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
       readonly userId: CodecTypes['pg/text@1']['output'];
     };
     readonly News: {
       readonly content: CodecTypes['pg/text@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly imageUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly published: CodecTypes['pg/bool@1']['output'];
@@ -279,7 +280,7 @@ export type FieldOutputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Notification: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly isRead: CodecTypes['pg/bool@1']['output'];
       readonly message: CodecTypes['pg/text@1']['output'];
@@ -289,7 +290,7 @@ export type FieldOutputTypes = {
     readonly PaymentMethod: {
       readonly accountName: CodecTypes['pg/text@1']['output'] | null;
       readonly accountNumber: CodecTypes['pg/text@1']['output'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly instructions: CodecTypes['pg/text@1']['output'] | null;
       readonly isAvailable: CodecTypes['pg/bool@1']['output'];
@@ -298,7 +299,7 @@ export type FieldOutputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Plan: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly durationDays: CodecTypes['pg/int4@1']['output'] | null;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly investmentAmount: CodecTypes['pg/int8@1']['output'];
@@ -309,7 +310,7 @@ export type FieldOutputTypes = {
     };
     readonly Rank: {
       readonly bonus: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly isActive: CodecTypes['pg/bool@1']['output'];
       readonly level: CodecTypes['pg/int4@1']['output'];
@@ -317,8 +318,17 @@ export type FieldOutputTypes = {
       readonly minReferralInvestment: CodecTypes['pg/int8@1']['output'];
       readonly name: CodecTypes['pg/text@1']['output'];
     };
+    readonly ReferralPlan: {
+      readonly createdAt: Date;
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly investmentPercentageBps: CodecTypes['pg/int4@1']['output'];
+      readonly isActive: CodecTypes['pg/bool@1']['output'];
+      readonly level: CodecTypes['pg/int4@1']['output'];
+      readonly profitPercentageBps: CodecTypes['pg/int4@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly SupportTicket: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly message: CodecTypes['pg/text@1']['output'];
       readonly status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
@@ -328,7 +338,7 @@ export type FieldOutputTypes = {
     };
     readonly Transaction: {
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly note: CodecTypes['pg/text@1']['output'] | null;
       readonly type:
@@ -343,7 +353,7 @@ export type FieldOutputTypes = {
     };
     readonly User: {
       readonly balance: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly email: CodecTypes['pg/text@1']['output'];
       readonly emailVerificationCodeHash: CodecTypes['pg/text@1']['output'] | null;
       readonly emailVerificationExpiresAt: Date | null;
@@ -371,7 +381,7 @@ export type FieldOutputTypes = {
       readonly accountName: CodecTypes['pg/text@1']['output'] | null;
       readonly accountNumber: CodecTypes['pg/text@1']['output'];
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
@@ -384,7 +394,8 @@ export type FieldInputTypes = {
   readonly public: {
     readonly Commission: {
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
+      readonly eventKey: CodecTypes['pg/text@1']['input'] | null;
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly investmentId: CodecTypes['pg/text@1']['input'] | null;
       readonly level: CodecTypes['pg/int4@1']['input'];
@@ -395,7 +406,7 @@ export type FieldInputTypes = {
     };
     readonly Deposit: {
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly planId: CodecTypes['pg/text@1']['input'] | null;
@@ -407,18 +418,18 @@ export type FieldInputTypes = {
     };
     readonly Investment: {
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly completedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly completedAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly planId: CodecTypes['pg/text@1']['input'];
       readonly reward: CodecTypes['pg/int8@1']['input'];
-      readonly startedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly startedAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly status: 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
       readonly userId: CodecTypes['pg/text@1']['input'];
     };
     readonly News: {
       readonly content: CodecTypes['pg/text@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly imageUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly published: CodecTypes['pg/bool@1']['input'];
@@ -427,7 +438,7 @@ export type FieldInputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Notification: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly isRead: CodecTypes['pg/bool@1']['input'];
       readonly message: CodecTypes['pg/text@1']['input'];
@@ -437,7 +448,7 @@ export type FieldInputTypes = {
     readonly PaymentMethod: {
       readonly accountName: CodecTypes['pg/text@1']['input'] | null;
       readonly accountNumber: CodecTypes['pg/text@1']['input'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly instructions: CodecTypes['pg/text@1']['input'] | null;
       readonly isAvailable: CodecTypes['pg/bool@1']['input'];
@@ -446,7 +457,7 @@ export type FieldInputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Plan: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly durationDays: CodecTypes['pg/int4@1']['input'] | null;
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly investmentAmount: CodecTypes['pg/int8@1']['input'];
@@ -457,7 +468,7 @@ export type FieldInputTypes = {
     };
     readonly Rank: {
       readonly bonus: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly isActive: CodecTypes['pg/bool@1']['input'];
       readonly level: CodecTypes['pg/int4@1']['input'];
@@ -465,8 +476,17 @@ export type FieldInputTypes = {
       readonly minReferralInvestment: CodecTypes['pg/int8@1']['input'];
       readonly name: CodecTypes['pg/text@1']['input'];
     };
+    readonly ReferralPlan: {
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly investmentPercentageBps: CodecTypes['pg/int4@1']['input'];
+      readonly isActive: CodecTypes['pg/bool@1']['input'];
+      readonly level: CodecTypes['pg/int4@1']['input'];
+      readonly profitPercentageBps: CodecTypes['pg/int4@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly SupportTicket: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly message: CodecTypes['pg/text@1']['input'];
       readonly status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
@@ -476,7 +496,7 @@ export type FieldInputTypes = {
     };
     readonly Transaction: {
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly note: CodecTypes['pg/text@1']['input'] | null;
       readonly type:
@@ -491,7 +511,7 @@ export type FieldInputTypes = {
     };
     readonly User: {
       readonly balance: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly email: CodecTypes['pg/text@1']['input'];
       readonly emailVerificationCodeHash: CodecTypes['pg/text@1']['input'] | null;
       readonly emailVerificationExpiresAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
@@ -519,7 +539,7 @@ export type FieldInputTypes = {
       readonly accountName: CodecTypes['pg/text@1']['input'] | null;
       readonly accountNumber: CodecTypes['pg/text@1']['input'];
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
@@ -532,7 +552,8 @@ export type StorageColumnTypes = {
   readonly public: {
     readonly Commission: {
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
+      readonly eventKey: CodecTypes['pg/text@1']['output'] | null;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly investmentId: CodecTypes['pg/text@1']['output'] | null;
       readonly level: CodecTypes['pg/int4@1']['output'];
@@ -543,7 +564,7 @@ export type StorageColumnTypes = {
     };
     readonly Deposit: {
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly planId: CodecTypes['pg/text@1']['output'] | null;
@@ -555,18 +576,18 @@ export type StorageColumnTypes = {
     };
     readonly Investment: {
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly completedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly completedAt: Date | null;
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly planId: CodecTypes['pg/text@1']['output'];
       readonly reward: CodecTypes['pg/int8@1']['output'];
-      readonly startedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly startedAt: Date;
       readonly status: 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
       readonly userId: CodecTypes['pg/text@1']['output'];
     };
     readonly News: {
       readonly content: CodecTypes['pg/text@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly imageUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly published: CodecTypes['pg/bool@1']['output'];
@@ -575,7 +596,7 @@ export type StorageColumnTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Notification: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly isRead: CodecTypes['pg/bool@1']['output'];
       readonly message: CodecTypes['pg/text@1']['output'];
@@ -585,7 +606,7 @@ export type StorageColumnTypes = {
     readonly PaymentMethod: {
       readonly accountName: CodecTypes['pg/text@1']['output'] | null;
       readonly accountNumber: CodecTypes['pg/text@1']['output'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly instructions: CodecTypes['pg/text@1']['output'] | null;
       readonly isAvailable: CodecTypes['pg/bool@1']['output'];
@@ -594,7 +615,7 @@ export type StorageColumnTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
     readonly Plan: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly durationDays: CodecTypes['pg/int4@1']['output'] | null;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly investmentAmount: CodecTypes['pg/int8@1']['output'];
@@ -605,7 +626,7 @@ export type StorageColumnTypes = {
     };
     readonly Rank: {
       readonly bonus: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly isActive: CodecTypes['pg/bool@1']['output'];
       readonly level: CodecTypes['pg/int4@1']['output'];
@@ -613,8 +634,17 @@ export type StorageColumnTypes = {
       readonly minReferralInvestment: CodecTypes['pg/int8@1']['output'];
       readonly name: CodecTypes['pg/text@1']['output'];
     };
+    readonly ReferralPlan: {
+      readonly createdAt: Date;
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly investmentPercentageBps: CodecTypes['pg/int4@1']['output'];
+      readonly isActive: CodecTypes['pg/bool@1']['output'];
+      readonly level: CodecTypes['pg/int4@1']['output'];
+      readonly profitPercentageBps: CodecTypes['pg/int4@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly SupportTicket: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly message: CodecTypes['pg/text@1']['output'];
       readonly status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
@@ -624,7 +654,7 @@ export type StorageColumnTypes = {
     };
     readonly Transaction: {
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly note: CodecTypes['pg/text@1']['output'] | null;
       readonly type:
@@ -639,7 +669,7 @@ export type StorageColumnTypes = {
     };
     readonly User: {
       readonly balance: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly email: CodecTypes['pg/text@1']['output'];
       readonly emailVerificationCodeHash: CodecTypes['pg/text@1']['output'] | null;
       readonly emailVerificationExpiresAt: Date | null;
@@ -667,7 +697,7 @@ export type StorageColumnTypes = {
       readonly accountName: CodecTypes['pg/text@1']['output'] | null;
       readonly accountNumber: CodecTypes['pg/text@1']['output'];
       readonly amount: CodecTypes['pg/int8@1']['output'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly createdAt: Date;
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
@@ -680,7 +710,8 @@ export type StorageColumnInputTypes = {
   readonly public: {
     readonly Commission: {
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
+      readonly eventKey: CodecTypes['pg/text@1']['input'] | null;
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly investmentId: CodecTypes['pg/text@1']['input'] | null;
       readonly level: CodecTypes['pg/int4@1']['input'];
@@ -691,7 +722,7 @@ export type StorageColumnInputTypes = {
     };
     readonly Deposit: {
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly planId: CodecTypes['pg/text@1']['input'] | null;
@@ -703,18 +734,18 @@ export type StorageColumnInputTypes = {
     };
     readonly Investment: {
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly completedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly completedAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly planId: CodecTypes['pg/text@1']['input'];
       readonly reward: CodecTypes['pg/int8@1']['input'];
-      readonly startedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly startedAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly status: 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
       readonly userId: CodecTypes['pg/text@1']['input'];
     };
     readonly News: {
       readonly content: CodecTypes['pg/text@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly imageUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly published: CodecTypes['pg/bool@1']['input'];
@@ -723,7 +754,7 @@ export type StorageColumnInputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Notification: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly isRead: CodecTypes['pg/bool@1']['input'];
       readonly message: CodecTypes['pg/text@1']['input'];
@@ -733,7 +764,7 @@ export type StorageColumnInputTypes = {
     readonly PaymentMethod: {
       readonly accountName: CodecTypes['pg/text@1']['input'] | null;
       readonly accountNumber: CodecTypes['pg/text@1']['input'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly instructions: CodecTypes['pg/text@1']['input'] | null;
       readonly isAvailable: CodecTypes['pg/bool@1']['input'];
@@ -742,7 +773,7 @@ export type StorageColumnInputTypes = {
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Plan: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly durationDays: CodecTypes['pg/int4@1']['input'] | null;
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly investmentAmount: CodecTypes['pg/int8@1']['input'];
@@ -753,7 +784,7 @@ export type StorageColumnInputTypes = {
     };
     readonly Rank: {
       readonly bonus: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly isActive: CodecTypes['pg/bool@1']['input'];
       readonly level: CodecTypes['pg/int4@1']['input'];
@@ -761,8 +792,17 @@ export type StorageColumnInputTypes = {
       readonly minReferralInvestment: CodecTypes['pg/int8@1']['input'];
       readonly name: CodecTypes['pg/text@1']['input'];
     };
+    readonly ReferralPlan: {
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly investmentPercentageBps: CodecTypes['pg/int4@1']['input'];
+      readonly isActive: CodecTypes['pg/bool@1']['input'];
+      readonly level: CodecTypes['pg/int4@1']['input'];
+      readonly profitPercentageBps: CodecTypes['pg/int4@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
     readonly SupportTicket: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly message: CodecTypes['pg/text@1']['input'];
       readonly status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
@@ -772,7 +812,7 @@ export type StorageColumnInputTypes = {
     };
     readonly Transaction: {
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly note: CodecTypes['pg/text@1']['input'] | null;
       readonly type:
@@ -787,7 +827,7 @@ export type StorageColumnInputTypes = {
     };
     readonly User: {
       readonly balance: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly email: CodecTypes['pg/text@1']['input'];
       readonly emailVerificationCodeHash: CodecTypes['pg/text@1']['input'] | null;
       readonly emailVerificationExpiresAt: CodecTypes['pg/timestamptz-date@1']['input'] | null;
@@ -815,7 +855,7 @@ export type StorageColumnInputTypes = {
       readonly accountName: CodecTypes['pg/text@1']['input'] | null;
       readonly accountNumber: CodecTypes['pg/text@1']['input'];
       readonly amount: CodecTypes['pg/int8@1']['input'];
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-date@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
       readonly status: 'PENDING' | 'APPROVED' | 'REJECTED';
@@ -828,7 +868,8 @@ export type StorageColumnInputTypes = {
 export namespace Models {
   export type public_Commission = {
     amount: CodecTypes['pg/int8@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
+    eventKey: CodecTypes['pg/text@1']['output'] | null;
     id: CodecTypes['pg/text@1']['output'];
     investmentId: CodecTypes['pg/text@1']['output'] | null;
     level: CodecTypes['pg/int4@1']['output'];
@@ -841,7 +882,7 @@ export namespace Models {
   };
   export type public_Deposit = {
     amount: CodecTypes['pg/int8@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
     planId: CodecTypes['pg/text@1']['output'] | null;
@@ -856,12 +897,12 @@ export namespace Models {
   };
   export type public_Investment = {
     amount: CodecTypes['pg/int8@1']['output'];
-    completedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    completedAt: Date | null;
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     planId: CodecTypes['pg/text@1']['output'];
     reward: CodecTypes['pg/int8@1']['output'];
-    startedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    startedAt: Date;
     status: 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
     userId: CodecTypes['pg/text@1']['output'];
     plan: public_Plan;
@@ -870,7 +911,7 @@ export namespace Models {
   };
   export type public_News = {
     content: CodecTypes['pg/text@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     imageUrl: CodecTypes['pg/text@1']['output'] | null;
     published: CodecTypes['pg/bool@1']['output'];
@@ -880,7 +921,7 @@ export namespace Models {
     readonly [RelationKeys]?: never;
   };
   export type public_Notification = {
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     isRead: CodecTypes['pg/bool@1']['output'];
     message: CodecTypes['pg/text@1']['output'];
@@ -892,7 +933,7 @@ export namespace Models {
   export type public_PaymentMethod = {
     accountName: CodecTypes['pg/text@1']['output'] | null;
     accountNumber: CodecTypes['pg/text@1']['output'] | null;
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     instructions: CodecTypes['pg/text@1']['output'] | null;
     isAvailable: CodecTypes['pg/bool@1']['output'];
@@ -902,7 +943,7 @@ export namespace Models {
     readonly [RelationKeys]?: never;
   };
   export type public_Plan = {
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     durationDays: CodecTypes['pg/int4@1']['output'] | null;
     id: CodecTypes['pg/text@1']['output'];
     investmentAmount: CodecTypes['pg/int8@1']['output'];
@@ -916,7 +957,7 @@ export namespace Models {
   };
   export type public_Rank = {
     bonus: CodecTypes['pg/int8@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     isActive: CodecTypes['pg/bool@1']['output'];
     level: CodecTypes['pg/int4@1']['output'];
@@ -925,8 +966,18 @@ export namespace Models {
     name: CodecTypes['pg/text@1']['output'];
     readonly [RelationKeys]?: never;
   };
+  export type public_ReferralPlan = {
+    createdAt: Date;
+    id: CodecTypes['pg/text@1']['output'];
+    investmentPercentageBps: CodecTypes['pg/int4@1']['output'];
+    isActive: CodecTypes['pg/bool@1']['output'];
+    level: CodecTypes['pg/int4@1']['output'];
+    profitPercentageBps: CodecTypes['pg/int4@1']['output'];
+    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    readonly [RelationKeys]?: never;
+  };
   export type public_SupportTicket = {
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     message: CodecTypes['pg/text@1']['output'];
     status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
@@ -938,7 +989,7 @@ export namespace Models {
   };
   export type public_Transaction = {
     amount: CodecTypes['pg/int8@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     note: CodecTypes['pg/text@1']['output'] | null;
     type:
@@ -955,7 +1006,7 @@ export namespace Models {
   };
   export type public_User = {
     balance: CodecTypes['pg/int8@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     email: CodecTypes['pg/text@1']['output'];
     emailVerificationCodeHash: CodecTypes['pg/text@1']['output'] | null;
     emailVerificationExpiresAt: Date | null;
@@ -984,7 +1035,7 @@ export namespace Models {
     accountName: CodecTypes['pg/text@1']['output'] | null;
     accountNumber: CodecTypes['pg/text@1']['output'];
     amount: CodecTypes['pg/int8@1']['output'];
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    createdAt: Date;
     id: CodecTypes['pg/text@1']['output'];
     method: 'SADAPAY' | 'EASYPAISA' | 'JAZZCASH' | 'BANK' | 'CRYPTO';
     status: 'PENDING' | 'APPROVED' | 'REJECTED';
@@ -1005,6 +1056,7 @@ export declare const models: {
     PaymentMethod: Models.public_PaymentMethod;
     Plan: Models.public_Plan;
     Rank: Models.public_Rank;
+    ReferralPlan: Models.public_ReferralPlan;
     SupportTicket: Models.public_SupportTicket;
     Transaction: Models.public_Transaction;
     User: Models.public_User;
@@ -1040,9 +1092,16 @@ type ContractBase = Omit<
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly eventKey: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
                   readonly many: false;
                 };
                 readonly id: {
@@ -1089,7 +1148,7 @@ type ContractBase = Omit<
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [];
+              uniques: readonly [{ readonly columns: readonly ['eventKey'] }];
               indexes: readonly [
                 {
                   readonly name: 'Commission_investmentId_idx_a040f76a';
@@ -1147,9 +1206,10 @@ type ContractBase = Omit<
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -1270,15 +1330,17 @@ type ContractBase = Omit<
                 };
                 readonly completedAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -1301,9 +1363,10 @@ type ContractBase = Omit<
                 };
                 readonly startedAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly status: {
@@ -1382,9 +1445,10 @@ type ContractBase = Omit<
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -1444,9 +1508,10 @@ type ContractBase = Omit<
               columns: {
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -1531,9 +1596,10 @@ type ContractBase = Omit<
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -1586,9 +1652,10 @@ type ContractBase = Omit<
               columns: {
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly durationDays: {
@@ -1664,9 +1731,10 @@ type ContractBase = Omit<
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -1732,13 +1800,77 @@ type ContractBase = Omit<
               ];
               foreignKeys: readonly [];
             };
+            readonly ReferralPlan: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly investmentPercentageBps: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly isActive: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                  readonly many: false;
+                };
+                readonly level: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly profitPercentageBps: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [{ readonly columns: readonly ['level'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'ReferralPlan_isActive_idx_77fe3ba1';
+                  readonly prefix: 'ReferralPlan_isActive_idx';
+                  readonly columns: readonly ['isActive'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [];
+            };
             readonly SupportTicket: {
               columns: {
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -1823,9 +1955,10 @@ type ContractBase = Omit<
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -1904,9 +2037,10 @@ type ContractBase = Omit<
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly email: {
@@ -2105,9 +2239,10 @@ type ContractBase = Omit<
                 };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
                 readonly id: {
@@ -2259,6 +2394,10 @@ type ContractBase = Omit<
     };
     readonly Plan: { readonly namespace: 'public' & NamespaceId; readonly model: 'Plan' };
     readonly Rank: { readonly namespace: 'public' & NamespaceId; readonly model: 'Rank' };
+    readonly ReferralPlan: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'ReferralPlan';
+    };
     readonly SupportTicket: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'SupportTicket';
@@ -2287,8 +2426,13 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
+              };
+              readonly eventKey: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
               readonly id: {
                 readonly nullable: false;
@@ -2336,6 +2480,7 @@ type ContractBase = Omit<
               readonly fields: {
                 readonly amount: { readonly column: 'amount' };
                 readonly createdAt: { readonly column: 'createdAt' };
+                readonly eventKey: { readonly column: 'eventKey' };
                 readonly id: { readonly column: 'id' };
                 readonly investmentId: { readonly column: 'investmentId' };
                 readonly level: { readonly column: 'level' };
@@ -2356,7 +2501,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -2442,14 +2588,16 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly createdAt: {
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -2468,7 +2616,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly status: {
@@ -2526,7 +2675,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -2579,7 +2729,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -2641,7 +2792,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -2695,7 +2847,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly durationDays: {
@@ -2779,7 +2932,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -2823,13 +2977,67 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly ReferralPlan: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly investmentPercentageBps: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly isActive: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly level: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly profitPercentageBps: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: Record<string, never>;
+            readonly storage: {
+              readonly table: 'ReferralPlan';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly id: { readonly column: 'id' };
+                readonly investmentPercentageBps: { readonly column: 'investmentPercentageBps' };
+                readonly isActive: { readonly column: 'isActive' };
+                readonly level: { readonly column: 'level' };
+                readonly profitPercentageBps: { readonly column: 'profitPercentageBps' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
           readonly SupportTicket: {
             readonly fields: {
               readonly createdAt: {
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -2895,7 +3103,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -2949,7 +3158,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly email: {
@@ -3116,7 +3326,8 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly codecId: 'pg/timestamptz-date@1';
+                  readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
@@ -3432,6 +3643,23 @@ type ContractBase = Omit<
           readonly ref: {
             readonly entry: 'Rank';
             readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'cuid2'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'ReferralPlan';
+            readonly field: 'id';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'instantNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'ReferralPlan';
+            readonly field: 'updatedAt';
             readonly namespace: 'public';
           };
         },
