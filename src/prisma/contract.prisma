@@ -40,6 +40,7 @@ enum TransactionType {
 }
 
 enum PaymentMethodType {
+  SADAPAY
   EASYPAISA
   JAZZCASH
   BANK
@@ -53,47 +54,43 @@ enum SupportStatus {
 }
 
 model User {
-  id           String     @id @default(cuid(1))
+  id           String @id @default(cuid(2))
   fullName     String
-  username     String     @unique
-  email        String     @unique
-  phone        String     @unique
+  username     String @unique
+  email        String @unique
+  phone        String
+
   passwordHash String
 
-  role   UserRole   @default(USER)
-  status UserStatus @default(ACTIVE)
+  role         UserRole   @default(USER)
+  status       UserStatus @default(ACTIVE)
 
-  balance         BigInt @default(0)
-  totalDeposit    BigInt @default(0)
-  totalWithdrawal BigInt @default(0)
-  totalReward     BigInt @default(0)
-  totalCommission BigInt @default(0)
+  balance          BigInt @default(0)
+  totalDeposit     BigInt @default(0)
+  totalWithdrawal  BigInt @default(0)
+  totalReward      BigInt @default(0)
+  totalCommission  BigInt @default(0)
 
   referralCode String @unique
   referredById String?
 
-  referredBy User?  @relation("UserReferral", fields: [referredById], references: [id])
-  referrals  User[] @relation("UserReferral")
+  emailVerified Boolean @default(false)
 
-  investments Investment[]
-  deposits    Deposit[]
-  withdrawals Withdrawal[]
-  commissions Commission[]
-  transactions Transaction[]
+  emailVerificationCodeHash    String?
+  emailVerificationExpiresAt   TimestamptzJsDate(3)?
+  emailVerificationLastSentAt  TimestamptzJsDate(3)?
 
-  supportTickets SupportTicket[]
-  notifications  Notification[]
+
+  passwordResetCodeHash        String?
+  passwordResetExpiresAt       TimestamptzJsDate(3)?
+  passwordResetLastSentAt      TimestamptzJsDate(3)?
 
   createdAt DateTime @default(now())
   updatedAt temporal.updatedAt()
-
-  @@index([referredById])
-  @@index([status])
-  @@index([createdAt])
 }
 
 model Plan {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   name String
 
@@ -105,6 +102,7 @@ model Plan {
   isActive Boolean @default(true)
 
   investments Investment[]
+  deposits Deposit[]
 
   createdAt DateTime @default(now())
   updatedAt temporal.updatedAt()
@@ -113,7 +111,7 @@ model Plan {
 }
 
 model Investment {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
   planId String
@@ -137,9 +135,10 @@ model Investment {
 }
 
 model Deposit {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
+   planId String?
 
   amount BigInt
 
@@ -151,6 +150,7 @@ model Deposit {
   status DepositStatus @default(PENDING)
 
   user User @relation(fields: [userId], references: [id])
+  plan Plan? @relation(fields: [planId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt temporal.updatedAt()
@@ -161,7 +161,7 @@ model Deposit {
 }
 
 model Withdrawal {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 
@@ -184,13 +184,22 @@ model Withdrawal {
   @@index([createdAt])
 }
 
+enum CommissionType {
+  INVESTMENT
+  PROFIT
+}
+
 model Commission {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId       String
   sourceUserId String
 
   investmentId String?
+  eventKey String? @unique
+
+  level        Int
+  type         CommissionType
 
   percentageBps Int
   amount        BigInt
@@ -202,10 +211,31 @@ model Commission {
   @@index([userId])
   @@index([sourceUserId])
   @@index([investmentId])
+  @@index([level])
+  @@index([type])
+}
+
+model Rank {
+  id String @id @default(cuid(2))
+
+  level Int @unique
+  name  String
+
+  minOwnInvestment      BigInt @default(0)
+  minReferralInvestment BigInt
+
+  bonus BigInt @default(0)
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  @@index([level])
+  @@index([isActive])
 }
 
 model Transaction {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 
@@ -224,7 +254,7 @@ model Transaction {
 }
 
 model PaymentMethod {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   name String
   type PaymentMethodType
@@ -239,25 +269,9 @@ model PaymentMethod {
   updatedAt temporal.updatedAt()
 }
 
-model Rank {
-  id String @id @default(cuid(1))
-
-  name String
-
-  minReferral Int
-  minVolume   BigInt
-
-  bonus BigInt @default(0)
-
-  isActive Boolean @default(true)
-
-  createdAt DateTime @default(now())
-
-  @@index([isActive])
-}
 
 model News {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   title String
   slug  String @unique
@@ -274,7 +288,7 @@ model News {
 }
 
 model SupportTicket {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 
@@ -293,7 +307,7 @@ model SupportTicket {
 }
 
 model Notification {
-  id String @id @default(cuid(1))
+  id String @id @default(cuid(2))
 
   userId String
 
@@ -308,4 +322,21 @@ model Notification {
 
   @@index([userId])
   @@index([isRead])
+}
+
+model ReferralPlan {
+  id String @id @default(cuid(2))
+
+  level Int @unique
+
+  // 500 = 5%, 400 = 4%, etc.
+  investmentPercentageBps Int
+  profitPercentageBps     Int
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt temporal.updatedAt()
+
+  @@index([isActive])
 }

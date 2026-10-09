@@ -1,43 +1,84 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-
+import { z } from "zod";
 
 import { createSession } from "@/src/lib/auth";
 import { db } from "@/src/prisma/db";
 
+const loginSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(1, "Username is required"),
+
+  password: z
+    .string()
+    .min(1, "Password is required"),
+});
+
 export async function POST(request: Request) {
   try {
-    const { username, password } = await request.json();
+    const body = await request.json();
 
-    const user = await db.user.findUnique({
-      where: {
-        username,
-      },
-    });
+    const data = loginSchema.parse(body);
+
+    const username = data.username.toLowerCase();
+
+     const user = await db.orm.public.User
+      .where({ username })
+      .first();
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid username or password" },
-        { status: 401 }
+        {
+          success: false,
+          error: "Invalid username or password",
+        },
+        {
+          status: 401,
+        }
       );
     }
 
     if (user.status !== "ACTIVE") {
       return NextResponse.json(
-        { error: "Your account is not active" },
-        { status: 403 }
+        {
+          success: false,
+          error: "Your account is not active",
+        },
+        {
+          status: 403,
+        }
       );
     }
+    if (!user.emailVerified) {
+  return NextResponse.json(
+    {
+      success: false,
+      error: "Please verify your email before logging in.",
+      code: "EMAIL_NOT_VERIFIED",
+      email: user.email,
+    },
+    {
+      status: 403,
+    }
+  );
+}
 
-    const valid = await bcrypt.compare(
-      password,
+    const validPassword = await bcrypt.compare(
+      data.password,
       user.passwordHash
     );
 
-    if (!valid) {
+    if (!validPassword) {
       return NextResponse.json(
-        { error: "Invalid username or password" },
-        { status: 401 }
+        {
+          success: false,
+          error: "Invalid username or password",
+        },
+        {
+          status: 401,
+        }
       );
     }
 
@@ -46,11 +87,35 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       role: user.role,
+      user: {
+        id: user.id,
+        username: user.username,
+        fullName: user.fullName,
+      },
     });
-  } catch {
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: error.issues[0]?.message ?? "Invalid login data",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    console.error("LOGIN_ERROR:", error);
+
     return NextResponse.json(
-      { error: "Login failed" },
-      { status: 500 }
+      {
+        success: false,
+        error: "Login failed",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }

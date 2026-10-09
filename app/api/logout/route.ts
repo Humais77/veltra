@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 import { logout } from "@/src/lib/auth";
 
 export async function POST() {
@@ -6,5 +7,6 @@ export async function POST() {
 
   return NextResponse.json({
     success: true,
+    message: "Logged out successfully",
   });
 }
