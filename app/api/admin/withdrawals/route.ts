@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/src/lib/auth";
 import { db } from "@/src/prisma/db";
@@ -9,7 +10,7 @@ export async function GET() {
 
     if (!admin || admin.role !== "ADMIN") {
       return NextResponse.json(
-        { error: "Forbidden" },
+        { success: false, error: "Forbidden" },
         { status: 403 }
       );
     }
@@ -23,20 +24,19 @@ export async function GET() {
         .all();
 
     return NextResponse.json({
-      withdrawals:
-        serializeBigInts(withdrawals),
+      success: true,
+      withdrawals: serializeBigInts(withdrawals),
     });
   } catch (error) {
-    console.error(
-      "ADMIN_WITHDRAWALS_GET_ERROR",
-      error
-    );
+    console.error("ADMIN_WITHDRAWALS_GET_ERROR", error);
 
     return NextResponse.json(
       {
+        success: false,
         error: "Failed to load withdrawals",
       },
       { status: 500 }
     );
   }
 }
+

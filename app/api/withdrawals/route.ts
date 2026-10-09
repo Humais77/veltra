@@ -3,26 +3,47 @@ import { getCurrentUser } from "@/src/lib/auth";
 import { db } from "@/src/prisma/db";
 import { serializeBigInts } from "@/src/lib/money";
 
-export async function GET() {
-  const user = await getCurrentUser();
 
-  if (!user) {
+export async function GET() {
+  try {
+    const user = await getCurrentUser();
+
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Unauthorized",
+        },
+        { status: 401 }
+      );
+    }
+
+    const withdrawals =
+      await db.orm.public.Withdrawal
+        .where({ userId: user.id })
+        .orderBy((withdrawal) =>
+          withdrawal.createdAt.desc()
+        )
+        .all();
+
+    return NextResponse.json({
+      success: true,
+      withdrawals: serializeBigInts(withdrawals),
+    });
+  } catch (error) {
+    console.error("USER_WITHDRAWALS_GET_ERROR", error);
+
     return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
+      {
+        success: false,
+        error: "Failed to load withdrawal history",
+      },
+      { status: 500 }
     );
   }
-
-  const withdrawals =
-    await db.orm.public.Withdrawal
-      .where({ userId: user.id })
-      .orderBy((w) => w.createdAt.desc())
-      .all();
-
-  return NextResponse.json(
-    serializeBigInts(withdrawals)
-  );
 }
+
+
 
 export async function POST(request: Request) {
   try {

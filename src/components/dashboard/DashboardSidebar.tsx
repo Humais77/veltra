@@ -43,7 +43,7 @@ const navigation = [
   },
   {
     label: "Withdraw",
-    href: "/dashboard/withdraw",
+    href: "/dashboard/withdrawals",
     icon: ArrowUpFromLine,
   },
   {

@@ -42,13 +42,27 @@ export default function AdminWithdrawalsPage() {
 
       const data = await response.json();
 
-      if (data.success) {
-        setWithdrawals(data.withdrawals ?? []);
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.error || "Unable to load withdrawals."
+        );
       }
+
+      setWithdrawals(data.withdrawals ?? []);
+    } catch (error) {
+      console.error("Failed to load withdrawals:", error);
+
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to load withdrawals."
+      );
     } finally {
       setLoading(false);
     }
   }
+
+
 
   useEffect(() => {
     loadWithdrawals();
@@ -250,9 +264,8 @@ function Status({ status }: { status: string }) {
 
   return (
     <span
-      className={`rounded-full px-3 py-1 text-xs font-bold ${
-        styles[status] || "bg-white/10 text-gray-400"
-      }`}
+      className={`rounded-full px-3 py-1 text-xs font-bold ${styles[status] || "bg-white/10 text-gray-400"
+        }`}
     >
       {status}
     </span>

@@ -26,6 +26,7 @@ export default function WithdrawalsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
+
   async function loadWithdrawals() {
     try {
       const response = await fetch("/api/withdrawals", {
@@ -34,13 +35,27 @@ export default function WithdrawalsPage() {
 
       const data = await response.json();
 
-      if (data.success) {
-        setWithdrawals(data.withdrawals ?? []);
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.error || "Unable to load withdrawal history."
+        );
       }
+
+      setWithdrawals(data.withdrawals ?? []);
+    } catch (error) {
+      console.error("Failed to load withdrawal history:", error);
+
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to load withdrawal history."
+      );
     } finally {
       setLoading(false);
     }
   }
+
+
 
   useEffect(() => {
     loadWithdrawals();
@@ -290,9 +305,8 @@ function Status({ status }: { status: string }) {
 
   return (
     <span
-      className={`rounded-full px-3 py-1 text-xs font-bold ${
-        styles[status] || "bg-white/10 text-gray-400"
-      }`}
+      className={`rounded-full px-3 py-1 text-xs font-bold ${styles[status] || "bg-white/10 text-gray-400"
+        }`}
     >
       {status}
     </span>
