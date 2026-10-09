@@ -119,41 +119,13 @@ export default async function DashboardPage() {
             
             <div className="flex items-center gap-3">
               <Sun className="h-8 w-8 text-pink-500/70" />
-              <h1 className="text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-[#4020bd] sm:text-6xl md:text-7xl">
+              <h1 className="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-[#4020bd] sm:text-4xl md:text-5xl">
                  {formatPKR(user.balance)}
               </h1>
             </div>
             
-            <p className="mt-4 text-xs font-medium text-gray-400">
-              <span className="text-pink-400">↗ +{formatPKR(0)} / sec</span> · SOL · USDT · BTC offtake
-            </p>
           </div>
 
-          {/* Right: Timer & Buttons */}
-          <div className="flex flex-col items-end gap-6">
-            {/* Timer */}
-            <div className="flex flex-col items-center rounded-2xl border border-white/5 bg-[#050814] p-4 text-center">
-              <p className="mb-2 text-[10px] font-bold tracking-widest text-gray-500 uppercase">
-                Next Payout In
-              </p>
-              <div className="flex items-center gap-2 text-2xl font-black text-white sm:text-3xl">
-                <div className="flex flex-col">
-                  <span>00</span>
-                  <span className="text-[9px] text-gray-500 uppercase">HR</span>
-                </div>
-                <span className="mb-4 text-pink-500/50">:</span>
-                <div className="flex flex-col">
-                  <span>00</span>
-                  <span className="text-[9px] text-gray-500 uppercase">MN</span>
-                </div>
-                <span className="mb-4 text-pink-500/50">:</span>
-                <div className="flex flex-col">
-                  <span>00</span>
-                  <span className="text-[9px] text-gray-500 uppercase">SC</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Bottom Banner of Earnings Card */}

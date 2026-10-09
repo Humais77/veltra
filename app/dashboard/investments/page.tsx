@@ -11,6 +11,7 @@ import {
 
 import { getCurrentUser } from "@/src/lib/auth";
 import { db } from "@/src/prisma/db";
+import DashboardHeader from "@/src/components/dashboard/DashboardHeader";
 
 export default async function InvestmentsPage() {
   const user = await getCurrentUser();
@@ -47,17 +48,14 @@ export default async function InvestmentsPage() {
   return (
     <main className="min-h-screen px-4 py-6 sm:px-6 lg:px-10 text-white">
       <div className="mx-auto max-w-7xl">
-        {/* Header */}
+        {/* Updated Header */}
         <div className="mb-8">
-          <p className="text-sm font-semibold text-pink-400">Portfolio</p>
-
-          <h1 className="mt-2 text-3xl font-black sm:text-4xl">
-            My Investments
-          </h1>
-
-          <p className="mt-2 text-sm text-gray-500">
-            Track your active and completed investment plans.
-          </p>
+          <DashboardHeader
+            userName={user.fullName}
+            pageTitle="My Investments"
+            subtitle="All your active investments in one place."
+            isOnline={true}
+          />
         </div>
 
         {/* Summary */}
@@ -152,7 +150,6 @@ function InvestmentCard({ investment }: { investment: any }) {
   return (
     <div className="relative w-full rounded-3xl border border-white/10 bg-[#080b1f]/80 p-3 shadow-2xl backdrop-blur-xl md:p-5 transition-all hover:border-pink-500/30">
       
-      {/* Top Bar */}
       <div className="mb-4 flex items-center justify-between px-2 pt-2 text-[10px] font-bold tracking-widest text-gray-500">
         <div className="flex items-center gap-2">
           <div className={`h-1.5 w-1.5 rounded-full ${isActive ? "bg-pink-500 animate-pulse" : "bg-blue-500"}`} />
@@ -163,7 +160,6 @@ function InvestmentCard({ investment }: { investment: any }) {
         <span>ID: {String(investment.id).slice(0, 8)}</span>
       </div>
 
-      {/* Graph Section */}
       <div className="relative mb-3 overflow-hidden rounded-2xl border border-white/5 bg-[#0c102a] p-5 h-48 flex flex-col justify-between">
         <div className="flex justify-between relative z-10">
           <div>
@@ -184,7 +180,6 @@ function InvestmentCard({ investment }: { investment: any }) {
           </div>
         </div>
 
-        {/* Ambient SVG Chart line */}
         <svg
           className="absolute bottom-0 left-0 w-full h-[60%] preserve-3d"
           viewBox="0 0 400 100"
@@ -206,7 +201,6 @@ function InvestmentCard({ investment }: { investment: any }) {
             stroke={isActive ? "#d8b4fe" : "#4b5563"}
             strokeWidth="2"
           />
-          {/* Glowing dot for active investments */}
           {isActive && (
             <circle
               cx="300"
@@ -219,7 +213,6 @@ function InvestmentCard({ investment }: { investment: any }) {
         </svg>
       </div>
 
-      {/* Details Grid */}
       <div className="grid grid-cols-2 gap-2 p-2 rounded-xl bg-[#050814]">
         <Info
           icon={<CalendarDays size={14} />}
@@ -233,7 +226,6 @@ function InvestmentCard({ investment }: { investment: any }) {
         />
       </div>
 
-      {/* Bottom Bar */}
       <div className="mt-4 flex items-center justify-between px-2 pb-1 text-[10px] font-bold tracking-widest text-gray-500">
         <div className="flex items-center gap-2">
           <div className={`h-1 w-1 rounded-full ${isActive ? "bg-purple-500" : "bg-blue-500"}`} />
@@ -243,10 +235,6 @@ function InvestmentCard({ investment }: { investment: any }) {
     </div>
   );
 }
-
-/* ============================================================ */
-/* SUB-COMPONENTS */
-/* ============================================================ */
 
 function Info({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (

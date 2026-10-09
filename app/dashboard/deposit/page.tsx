@@ -1,4 +1,3 @@
-
 "use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
@@ -11,6 +10,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import DashboardHeader from "@/src/components/dashboard/DashboardHeader"; // Import the header
 
 type PaymentMethod = {
   id: string;
@@ -45,6 +45,12 @@ export default function DepositPage() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error">("success");
+  
+  // We need the user's name for the header. Since this is a client component,
+  // we can fetch it or hardcode it if available via context. 
+  // For now, we'll use a placeholder or pass it down from a parent server component.
+  // Ideally, you'd fetch this from your auth context or pass it as a prop.
+  const [userName, setUserName] = useState("User");
 
   const selectedMethod =
     paymentMethods.find((method) => method.type === selectedMethodType) ??
@@ -186,7 +192,15 @@ export default function DepositPage() {
   return (
     <main className="min-h-screen px-4 py-6 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl">
-        <Header />
+        {/* Updated Header */}
+        <div className="mb-8">
+          <DashboardHeader
+            userName={userName}
+            pageTitle="Deposit"
+            subtitle="Add money to your deposit wallet."
+            isOnline={true}
+          />
+        </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Payment methods */}
@@ -466,18 +480,6 @@ export default function DepositPage() {
         </section>
       </div>
     </main>
-  );
-}
-
-function Header() {
-  return (
-    <div className="mb-8">
-      <p className="text-sm font-semibold text-pink-400">Wallet</p>
-      <h1 className="mt-2 text-3xl font-black">Make a Deposit</h1>
-      <p className="mt-2 text-sm text-gray-500">
-        Add funds to your Veltra balance using an available payment method.
-      </p>
-    </div>
   );
 }
 

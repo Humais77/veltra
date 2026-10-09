@@ -62,7 +62,8 @@ const navigationGroups = [
 export default function DashboardSidebar({ 
   user 
 }: { 
-  user?: { fullName: string; email?: string } 
+  // Updated type to match your Prisma User object safely
+  user?: { fullName: string | null; email: string | null } | null 
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -77,6 +78,10 @@ export default function DashboardSidebar({
     router.replace("/login");
     router.refresh();
   }
+
+  // Fallbacks if user data hasn't loaded yet
+  const displayName = user?.fullName || "User";
+  const displayEmail = user?.email || "No email provided";
 
   const sidebar = (
     <aside className="flex h-full w-72 flex-col bg-[#050814] text-white">
@@ -99,7 +104,7 @@ export default function DashboardSidebar({
         </Link>
       </div>
 
-      {/* Profile Card (Moved to Top) */}
+      {/* Profile Card with Real Data & Online Dot */}
       <div className="px-4 mt-6 mb-2">
         <Link 
           href="/dashboard/profile"
@@ -107,15 +112,20 @@ export default function DashboardSidebar({
           className="group flex items-center justify-between rounded-2xl border border-white/5 bg-[#080b1f] p-3 shadow-lg transition-all hover:border-pink-500/30 hover:bg-[#0c102a]"
         >
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-[#4020bd] text-sm font-bold text-white shadow-[0_0_10px_rgba(236,72,153,0.3)]">
-              {user?.fullName?.charAt(0).toUpperCase() || "U"}
+            {/* Avatar with Online Dot */}
+            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-[#4020bd] text-sm font-bold text-white shadow-[0_0_10px_rgba(236,72,153,0.3)]">
+              {displayName.charAt(0).toUpperCase()}
+              
+              {/* Green Online Dot */}
+              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-2 border-[#080b1f] bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
             </div>
+
             <div className="flex flex-col truncate">
               <span className="truncate text-sm font-bold text-white uppercase tracking-wide">
-                {user?.fullName || "SunZee1 User"}
+                {displayName}
               </span>
               <span className="truncate text-[10px] font-medium text-gray-500">
-                {user?.email || "Investor Account"}
+                {displayEmail}
               </span>
             </div>
           </div>

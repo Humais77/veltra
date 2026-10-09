@@ -9,6 +9,7 @@ import {
 
 import { getCurrentUser } from "@/src/lib/auth";
 import { db } from "@/src/prisma/db";
+import DashboardHeader from "@/src/components/dashboard/DashboardHeader";
 
 export default async function TransactionsPage() {
   const user = await getCurrentUser();
@@ -23,18 +24,14 @@ export default async function TransactionsPage() {
   return (
     <main className="min-h-screen px-4 py-6 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-7xl">
+        {/* Updated Header */}
         <div className="mb-8">
-          <p className="text-sm font-semibold text-pink-400">
-            Wallet Activity
-          </p>
-
-          <h1 className="mt-2 text-3xl font-black">
-            Transactions
-          </h1>
-
-          <p className="mt-2 text-sm text-gray-500">
-            Complete history of activity on your Veltra account.
-          </p>
+          <DashboardHeader
+            userName={user.fullName}
+            pageTitle="Transactions"
+            subtitle="A full history of your account activity."
+            isOnline={true}
+          />
         </div>
 
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#080b1f]">
@@ -86,10 +83,10 @@ export default async function TransactionsPage() {
                     </p>
 
                     <p className="mt-1 text-xs text-gray-600">
-  {new Date(
-    transaction.createdAt.epochMilliseconds
-  ).toLocaleString("en-PK")}
-</p>
+                      {new Date(
+                        transaction.createdAt.epochMilliseconds
+                      ).toLocaleString("en-PK")}
+                    </p>
                   </div>
                 </div>
               ))}

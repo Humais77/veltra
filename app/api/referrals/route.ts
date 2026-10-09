@@ -5,222 +5,132 @@ import { serializeBigInts } from "@/src/lib/money";
 
 export async function GET() {
   try {
-    const user = await getCurrentUser();
+    const currentUser = await getCurrentUser();
 
-    if (!user) {
+    if (!currentUser || currentUser.role !== "USER") {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
 
-    const allUsers =
-      await db.orm.public.User
-        .select(
-          "id",
-          "fullName",
-          "username",
-          "email",
-          "referredById",
-          "createdAt"
-        )
-        .all();
+    const [users, investments, commissions] = await Promise.all([
+      db.orm.public.User.all(),
+      db.orm.public.Investment.all(),
+      db.orm.public.Commission.all(),
+    ]);
 
-    /*
-     * Build the user's five-level network.
-     */
-    const levels: Record<
-      number,
-      string[]
-    > = {
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-    };
+    const investedByUser = new Map<string, bigint>();
 
-    let parentIds = [user.id];
-
-    for (
-      let level = 1;
-      level <= 5;
-      level++
-    ) {
-      const usersAtLevel =
-        allUsers.filter(
-          (item) =>
-            item.referredById &&
-            parentIds.includes(
-              item.referredById
-            )
-        );
-
-      levels[level] =
-        usersAtLevel.map(
-          (item) => item.id
-        );
-
-      parentIds =
-        usersAtLevel.map(
-          (item) => item.id
-        );
-
-      if (parentIds.length === 0) {
-        break;
-      }
-    }
-
-    const networkIds = [
-      ...new Set(
-        Object.values(levels).flat()
-      ),
-    ];
-
-    /*
-     * Investment totals.
-     */
-    let networkInvestment = 0n;
-
-    if (networkIds.length > 0) {
-      const investments =
-        await db.orm.public.Investment
-          .where((investment) =>
-            investment.userId.in(
-              networkIds
-            )
-          )
-          .all();
-
-      for (const investment of investments) {
-        networkInvestment +=
-          investment.amount;
-      }
-    }
-
-    /*
-     * Commissions.
-     */
-    const commissions =
-      await db.orm.public.Commission
-        .where({
-          userId: user.id,
-        })
-        .orderBy((commission) =>
-          commission.createdAt.desc()
-        )
-        .all();
-
-    let totalCommission = 0n;
-
-    const levelBreakdown = {
-      1: {
-        referrals: levels[1].length,
-        earnings: 0n,
-      },
-      2: {
-        referrals: levels[2].length,
-        earnings: 0n,
-      },
-      3: {
-        referrals: levels[3].length,
-        earnings: 0n,
-      },
-      4: {
-        referrals: levels[4].length,
-        earnings: 0n,
-      },
-      5: {
-        referrals: levels[5].length,
-        earnings: 0n,
-      },
-    };
-
-    for (const commission of commissions) {
-      totalCommission +=
-        commission.amount;
-
+    for (const investment of investments as any[]) {
       if (
-        commission.level >= 1 &&
-        commission.level <= 5
+        investment.status !== "ACTIVE" &&
+        investment.status !== "COMPLETED"
       ) {
-        levelBreakdown[
-          commission.level as 1 | 2 | 3 | 4 | 5
-        ].earnings +=
-          commission.amount;
+        continue;
       }
+
+      investedByUser.set(
+        investment.userId,
+        (investedByUser.get(investment.userId) ?? 0n) +
+          BigInt(investment.amount)
+      );
     }
 
-    /*
-     * Referral list.
-     */
-    const referrals = networkIds
-      .map((id) => {
-        const referral =
-          allUsers.find(
-            (item) => item.id === id
-          );
+    const network: any[] = [];
+    let frontier = [{ id: currentUser.id, level: 0 }];
+    const visited = new Set<string>([currentUser.id]);
 
-        if (!referral) return null;
+    for (let level = 1; level <= 5; level++) {
+      const parentIds = new Set(frontier.map((item) => item.id));
 
-        let level = 0;
+      const children = users
+        .filter(
+          (user: any) =>
+            user.referredById &&
+            parentIds.has(user.referredById) &&
+            !visited.has(user.id)
+        )
+        .map((user: any) => ({ ...user, level }));
 
-        for (let i = 1; i <= 5; i++) {
-          if (
-            levels[i].includes(id)
-          ) {
-            level = i;
-            break;
-          }
-        }
+      for (const child of children) {
+        visited.add(child.id);
 
-        return {
-          id: referral.id,
-          fullName: referral.fullName,
-          username: referral.username,
-          email: referral.email,
+        network.push({
+          id: child.id,
+          fullName: child.fullName,
+          username: child.username,
+          referralCode: child.referralCode,
           level,
-          createdAt:
-            referral.createdAt,
-        };
-      })
-      .filter(Boolean);
+          investmentAmount: investedByUser.get(child.id) ?? 0n,
+          hasInvested: (investedByUser.get(child.id) ?? 0n) > 0n,
+          createdAt: child.createdAt,
+        });
+      }
+
+      frontier = children.map((child: any) => ({
+        id: child.id,
+        level,
+      }));
+
+      if (frontier.length === 0) break;
+    }
+
+    const levelBreakdown = Array.from({ length: 5 }, (_, index) => {
+      const level = index + 1;
+      const members = network.filter((user) => user.level === level);
+
+      return {
+        level,
+        count: members.length,
+        investedMembers: members.filter((user) => user.hasInvested).length,
+        investment: members.reduce(
+          (sum: bigint, user: any) =>
+            sum + BigInt(user.investmentAmount),
+          0n
+        ),
+      };
+    });
+
+    const myCommissions = commissions
+      .filter((commission: any) => commission.userId === currentUser.id)
+      .sort(
+        (a: any, b: any) =>
+          new Date(b.createdAt).getTime() -
+          new Date(a.createdAt).getTime()
+      );
+
+    const totalCommission = myCommissions.reduce(
+      (sum: bigint, commission: any) =>
+        sum + BigInt(commission.amount),
+      0n
+    );
+
+    const totalNetworkInvestment = levelBreakdown.reduce(
+      (sum, item) => sum + item.investment,
+      0n
+    );
 
     return NextResponse.json(
   serializeBigInts({
     success: true,
-
-    referralCode: user.referralCode,
-
-    referralLink: `/register?ref=${user.referralCode}`,
-
-    totalReferrals: networkIds.length,
-
-    directReferrals: levels[1].length,
-
-    networkInvestment,
-
+    referralCode: currentUser.referralCode,
+    referralLink: `/register?ref=${encodeURIComponent(
+      currentUser.referralCode
+    )}`,
+    totalReferrals: network.length,
+    directReferrals: levelBreakdown[0].count,
+    networkInvestment: totalNetworkInvestment,
     totalCommission,
-
     levelBreakdown,
-
-    referrals,
-
-    commissions,
+    referrals: network,
+    commissions: myCommissions,
   })
 );
   } catch (error) {
-    console.error(
-      "REFERRALS_GET_ERROR",
-      error
-    );
-
+    console.error("USER_REFERRALS_GET", error);
     return NextResponse.json(
-      {
-        success: false,
-        error:
-          "Failed to load referral information",
-      },
+      { success: false, error: "Failed to load referrals." },
       { status: 500 }
     );
   }

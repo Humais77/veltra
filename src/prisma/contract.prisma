@@ -196,6 +196,7 @@ model Commission {
   sourceUserId String
 
   investmentId String?
+  eventKey String? @unique
 
   level        Int
   type         CommissionType
@@ -321,4 +322,21 @@ model Notification {
 
   @@index([userId])
   @@index([isRead])
+}
+
+model ReferralPlan {
+  id String @id @default(cuid(2))
+
+  level Int @unique
+
+  // 500 = 5%, 400 = 4%, etc.
+  investmentPercentageBps Int
+  profitPercentageBps     Int
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt temporal.updatedAt()
+
+  @@index([isActive])
 }

@@ -1,13 +1,13 @@
-import { getReferralRate } from "@/src/lib/referrals";
+type CommissionEventType = "INVESTMENT" | "PROFIT";
 
-type TransactionType = "INVESTMENT" | "PROFIT";
-
-type ReferralUser = {
-  id: string;
-  referredById: string | null;
-  status: string;
-  balance: bigint;
-  totalCommission: bigint;
+type CreateReferralCommissionsArgs = {
+  tx: any;
+  sourceUserId: string;
+  amount: bigint;
+  investmentId: string;
+  type: CommissionEventType;
+  // Required for recurring profit payouts, e.g. PROFIT:<investmentId>:<payoutId>.
+  eventKey?: string;
 };
 
 export async function createReferralCommissions({
@@ -16,131 +16,96 @@ export async function createReferralCommissions({
   amount,
   investmentId,
   type,
-}: {
-  tx: any;
-  sourceUserId: string;
-  amount: bigint;
-  investmentId?: string;
-  type: TransactionType;
-}) {
-  if (amount <= 0n) {
-    return;
+  eventKey,
+}: CreateReferralCommissionsArgs) {
+  if (amount <= 0n) return;
+
+  if (type === "PROFIT" && !eventKey) {
+    throw new Error(
+      "A unique eventKey is required for each profit commission payout."
+    );
   }
 
-  let currentUserId: string | null = sourceUserId;
+  const plans = await tx.orm.public.ReferralPlan.all();
+  const activePlans = plans.filter(
+    (plan: any) => plan.isActive && plan.level >= 1 && plan.level <= 5
+  );
 
-  for (let level = 1; level <= 5; level++) {
-    if (!currentUserId) {
-      break;
-    }
+  const sourceUser = await tx.orm.public.User
+    .where({ id: sourceUserId })
+    .first();
 
-    /*
-     * Get the current user in the referral chain.
-     *
-     * L1:
-     * source user -> direct sponsor
-     *
-     * L2:
-     * sponsor -> sponsor's sponsor
-     *
-     * etc.
-     */
-    const sourceUser: ReferralUser | null =
-      (await tx.orm.public.User.first({
-        id: currentUserId,
-      })) as ReferralUser | null;
+  if (!sourceUser) {
+    throw new Error("REFERRAL_SOURCE_USER_NOT_FOUND");
+  }
 
-    if (!sourceUser) {
-      break;
-    }
+  let ancestorId: string | null = sourceUser.referredById;
 
-    /*
-     * Find this user's sponsor.
-     */
-    const referrerId: string | null =
-      sourceUser.referredById;
+  for (let level = 1; level <= 5 && ancestorId; level++) {
+    // Guard against malformed referral loops.
+    if (ancestorId === sourceUserId) break;
 
-    if (!referrerId) {
-      break;
-    }
+    const ancestor = await tx.orm.public.User
+      .where({ id: ancestorId })
+      .first();
 
-    const referrer: ReferralUser | null =
-      (await tx.orm.public.User.first({
-        id: referrerId,
-      })) as ReferralUser | null;
+    if (!ancestor) break;
 
-    if (!referrer) {
-      break;
-    }
-
-    /*
-     * Only active users receive referral commissions.
-     */
-    if (referrer.status !== "ACTIVE") {
-      currentUserId = referrer.id;
-      continue;
-    }
-
-    /*
-     * Get the commission rate for this level.
-     *
-     * Investment:
-     * L1 = 5%
-     * L2 = 4%
-     * L3 = 3%
-     * L4 = 2%
-     * L5 = 1%
-     *
-     * Profit:
-     * L1 = 5%
-     * L2 = 4%
-     * L3 = 3%
-     * L4 = 2%
-     * L5 = 1%
-     */
-    const percentageBps: number = getReferralRate(
-      level,
-      type
+    const plan = activePlans.find(
+      (item: any) => item.level === level
     );
 
-    if (percentageBps > 0) {
-      const commission: bigint =
-        (amount * BigInt(percentageBps)) / 10000n;
+    if (plan) {
+      const percentageBps =
+        type === "INVESTMENT"
+          ? plan.investmentPercentageBps
+          : plan.profitPercentageBps;
 
-      if (commission > 0n) {
-        await tx.orm.public.Commission.create({
-          userId: referrer.id,
-          sourceUserId,
-          investmentId: investmentId ?? null,
-          level,
-          type,
-          percentageBps,
-          amount: commission,
-        });
+      if (percentageBps > 0) {
+        const commissionAmount =
+          (amount * BigInt(percentageBps)) / 10000n;
 
-        await tx.orm.public.User
-          .where({
-            id: referrer.id,
-          })
-          .update({
-            balance: referrer.balance + commission,
-            totalCommission:
-              referrer.totalCommission + commission,
+        const stableEventKey =
+          type === "INVESTMENT"
+            ? `INVESTMENT:${investmentId}:L${level}:${ancestor.id}`
+            : `${eventKey}:L${level}:${ancestor.id}`;
+
+        const existing = await tx.orm.public.Commission
+          .where({ eventKey: stableEventKey })
+          .first();
+
+        if (!existing && commissionAmount > 0n) {
+          await tx.orm.public.Commission.create({
+            userId: ancestor.id,
+            sourceUserId,
+            investmentId,
+            level,
+            type,
+            percentageBps,
+            amount: commissionAmount,
+            eventKey: stableEventKey,
           });
 
-        await tx.orm.public.Transaction.create({
-          userId: referrer.id,
-          type: "REFERRAL_COMMISSION",
-          amount: commission,
-          note:
-            `${type === "INVESTMENT" ? "Investment" : "Profit"} referral commission L${level} from ${sourceUserId}`,
-        });
+          await tx.orm.public.User
+            .where({ id: ancestor.id })
+            .update({
+              balance: ancestor.balance + commissionAmount,
+              totalCommission:
+                ancestor.totalCommission + commissionAmount,
+            });
+
+          await tx.orm.public.Transaction.create({
+            userId: ancestor.id,
+            type: "REFERRAL_COMMISSION",
+            amount: commissionAmount,
+            note:
+              `${type} referral commission — level ${level} ` +
+              `(${percentageBps / 100}%)`,
+          });
+        }
       }
     }
 
-    /*
-     * Move one level upward.
-     */
-    currentUserId = referrer.id;
+    ancestorId = ancestor.referredById ?? null;
   }
 }
