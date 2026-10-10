@@ -53,7 +53,7 @@ export default async function NewsPage() {
                 <div className="p-6">
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <CalendarDays size={14} />
-                    {new Date(item.createdAt.epochMilliseconds).toLocaleDateString("en-PK")}
+                    {new Date(item.createdAt).toLocaleDateString("en-PK")}
                   </div>
 
                   <h2 className="mt-4 text-xl font-bold">

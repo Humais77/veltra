@@ -1974,6 +1974,9 @@
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "Commission_userId_idx_a489d58a"
+                  },
                   "source": {
                     "columns": [
                       "userId"
@@ -2135,6 +2138,9 @@
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "Deposit_userId_idx_a489d58a"
+                  },
                   "source": {
                     "columns": [
                       "userId"
@@ -2151,6 +2157,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "Deposit_planId_idx_5b32079a"
+                  },
                   "source": {
                     "columns": [
                       "planId"
@@ -2292,6 +2301,9 @@
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "Investment_userId_idx_a489d58a"
+                  },
                   "source": {
                     "columns": [
                       "userId"
@@ -2308,6 +2320,9 @@
                   }
                 },
                 {
+                  "index": {
+                    "name": "Investment_planId_idx_5b32079a"
+                  },
                   "source": {
                     "columns": [
                       "planId"
@@ -2481,6 +2496,9 @@
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "Notification_userId_idx_a489d58a"
+                  },
                   "source": {
                     "columns": [
                       "userId"
@@ -2746,14 +2764,6 @@
                   "name": "Rank_isActive_idx_77fe3ba1",
                   "prefix": "Rank_isActive_idx",
                   "unique": false
-                },
-                {
-                  "columns": [
-                    "level"
-                  ],
-                  "name": "Rank_level_idx_30977cf3",
-                  "prefix": "Rank_level_idx",
-                  "unique": false
                 }
               ],
               "primaryKey": {
@@ -2906,6 +2916,9 @@
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "SupportTicket_userId_idx_a489d58a"
+                  },
                   "source": {
                     "columns": [
                       "userId"
@@ -3002,6 +3015,9 @@
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "Transaction_userId_idx_a489d58a"
+                  },
                   "source": {
                     "columns": [
                       "userId"
@@ -3359,6 +3375,9 @@
               },
               "foreignKeys": [
                 {
+                  "index": {
+                    "name": "Withdrawal_userId_idx_a489d58a"
+                  },
                   "source": {
                     "columns": [
                       "userId"
@@ -3492,7 +3511,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "acb30dfd625d9ae75646b7a7180132e344be78aaf1ac5fc2d72ce955ce69a6cf"
+    "storageHash": "a489db00c61c38f97e094aff069ae8ddff14b9af63071cb1fed1ac34dc464bee"
   },
   "execution": {
     "executionHash": "3bc3cd275c52608b22bd36e9ca5b23f74b52f191f5daa88854b2a7ea6f7b1157",

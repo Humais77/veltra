@@ -84,7 +84,7 @@ export default async function TransactionsPage() {
 
                     <p className="mt-1 text-xs text-gray-600">
                       {new Date(
-                        transaction.createdAt.epochMilliseconds
+                        transaction.createdAt
                       ).toLocaleString("en-PK")}
                     </p>
                   </div>
