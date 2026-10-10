@@ -6,8 +6,8 @@ import React from "react";
 
 
 export const metadata = {
-  title: "About Us | SunZee1",
-  description: "Learn about SunZee1, a registered solar energy investment platform.",
+  title: "About Us | Veltra",
+  description: "Learn about Veltra, a registered solar energy investment platform.",
 };
 
 export default function AboutPage() {

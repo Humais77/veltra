@@ -80,13 +80,14 @@ model User {
   emailVerificationExpiresAt   TimestamptzJsDate(3)?
   emailVerificationLastSentAt  TimestamptzJsDate(3)?
 
-
   passwordResetCodeHash        String?
   passwordResetExpiresAt       TimestamptzJsDate(3)?
   passwordResetLastSentAt      TimestamptzJsDate(3)?
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
   updatedAt temporal.updatedAt()
+
+  @@map("User")
 }
 
 model Plan {
@@ -104,10 +105,11 @@ model Plan {
   investments Investment[]
   deposits Deposit[]
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
   updatedAt temporal.updatedAt()
 
   @@index([isActive])
+  @@map("Plan")
 }
 
 model Investment {
@@ -121,24 +123,25 @@ model Investment {
 
   status InvestmentStatus @default(ACTIVE)
 
-  startedAt DateTime @default(now())
-  completedAt DateTime?
+  startedAt TimestamptzJsDate(3) @default(now())
+  completedAt TimestamptzJsDate(3)?
 
   user User @relation(fields: [userId], references: [id])
   plan Plan @relation(fields: [planId], references: [id])
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
 
   @@index([userId])
   @@index([planId])
   @@index([status])
+  @@map("Investment")
 }
 
 model Deposit {
   id String @id @default(cuid(2))
 
   userId String
-   planId String?
+  planId String?
 
   amount BigInt
 
@@ -152,12 +155,13 @@ model Deposit {
   user User @relation(fields: [userId], references: [id])
   plan Plan? @relation(fields: [planId], references: [id])
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
   updatedAt temporal.updatedAt()
 
   @@index([userId])
   @@index([status])
   @@index([createdAt])
+  @@map("Deposit")
 }
 
 model Withdrawal {
@@ -176,12 +180,13 @@ model Withdrawal {
 
   user User @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
   updatedAt temporal.updatedAt()
 
   @@index([userId])
   @@index([status])
   @@index([createdAt])
+  @@map("Withdrawal")
 }
 
 enum CommissionType {
@@ -206,13 +211,14 @@ model Commission {
 
   user User @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
 
   @@index([userId])
   @@index([sourceUserId])
   @@index([investmentId])
   @@index([level])
   @@index([type])
+  @@map("Commission")
 }
 
 model Rank {
@@ -228,10 +234,11 @@ model Rank {
 
   isActive Boolean @default(true)
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
 
   @@index([level])
   @@index([isActive])
+  @@map("Rank")
 }
 
 model Transaction {
@@ -246,11 +253,12 @@ model Transaction {
 
   user User @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
 
   @@index([userId])
   @@index([type])
   @@index([createdAt])
+  @@map("Transaction")
 }
 
 model PaymentMethod {
@@ -265,10 +273,11 @@ model PaymentMethod {
 
   isAvailable Boolean @default(false)
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
   updatedAt temporal.updatedAt()
-}
 
+  @@map("PaymentMethod")
+}
 
 model News {
   id String @id @default(cuid(2))
@@ -281,10 +290,11 @@ model News {
 
   published Boolean @default(false)
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
   updatedAt temporal.updatedAt()
 
   @@index([published])
+  @@map("News")
 }
 
 model SupportTicket {
@@ -299,11 +309,12 @@ model SupportTicket {
 
   user User @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
   updatedAt temporal.updatedAt()
 
   @@index([userId])
   @@index([status])
+  @@map("SupportTicket")
 }
 
 model Notification {
@@ -318,10 +329,11 @@ model Notification {
 
   user User @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
 
   @@index([userId])
   @@index([isRead])
+  @@map("Notification")
 }
 
 model ReferralPlan {
@@ -335,8 +347,9 @@ model ReferralPlan {
 
   isActive Boolean @default(true)
 
-  createdAt DateTime @default(now())
+  createdAt TimestamptzJsDate(3) @default(now())
   updatedAt temporal.updatedAt()
 
   @@index([isActive])
+  @@map("ReferralPlan")
 }

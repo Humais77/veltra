@@ -59,16 +59,18 @@ const navigationGroups = [
   },
 ];
 
-export default function DashboardSidebar({ 
-  user 
-}: { 
-  // Updated type to match your Prisma User object safely
-  user?: { fullName: string | null; email: string | null } | null 
+export default function DashboardSidebar({
+  user,
+  mobileOpen,
+  onMobileClose,
+}: {
+  user?: { fullName: string | null; email: string | null } | null;
+  mobileOpen: boolean;
+  onMobileClose: () => void;
 }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   async function handleLogout() {
     await fetch("/api/auth/logout", {
@@ -91,7 +93,7 @@ export default function DashboardSidebar({
         <Link
           href="/dashboard"
           className="flex items-center gap-3 transition-transform hover:scale-105"
-          onClick={() => setMobileOpen(false)}
+          onClick={onMobileClose}
         >
           {/* Logo Icon */}
           <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 to-[#4020bd] shadow-[0_0_15px_rgba(236,72,153,0.3)]">
@@ -99,7 +101,7 @@ export default function DashboardSidebar({
             <div className="absolute right-1 top-1 h-1 w-1 rounded-full bg-white" />
           </div>
           <span className="text-2xl font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-white">
-            SunZee1
+            Veltra
           </span>
         </Link>
       </div>
@@ -108,7 +110,7 @@ export default function DashboardSidebar({
       <div className="px-4 mt-6 mb-2">
         <Link 
           href="/dashboard/profile"
-          onClick={() => setMobileOpen(false)}
+          onClick={onMobileClose}
           className="group flex items-center justify-between rounded-2xl border border-white/5 bg-[#080b1f] p-3 shadow-lg transition-all hover:border-pink-500/30 hover:bg-[#0c102a]"
         >
           <div className="flex items-center gap-3 overflow-hidden">
@@ -152,7 +154,7 @@ export default function DashboardSidebar({
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={onMobileClose}
                       className={`group relative flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
                         active
                           ? "bg-gradient-to-r from-pink-500/10 to-[#4020bd]/10 text-pink-400"
@@ -200,29 +202,20 @@ export default function DashboardSidebar({
         {sidebar}
       </div>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile Sidebar Drawer */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-50 bg-[#050814]/80 backdrop-blur-sm lg:hidden"
-          onClick={() => setMobileOpen(false)}
+          onClick={onMobileClose}
         >
           <div
-            className="h-full w-72 shadow-2xl transition-transform"
+            className="h-full w-72 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {sidebar}
           </div>
         </div>
       )}
-
-      {/* Mobile Toggle Button */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="fixed bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-[#4020bd] text-white shadow-[0_4px_20px_rgba(236,72,153,0.4)] lg:hidden"
-        aria-label="Open menu"
-      >
-        <LayoutDashboard size={24} />
-      </button>
     </>
   );
 }

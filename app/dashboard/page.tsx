@@ -91,7 +91,7 @@ export default async function DashboardPage() {
   const totalInvestments = totalInvestmentCountResult.count ?? 0;
 
   // Domain for the referral link
-  const domainUrl = process.env.NEXT_PUBLIC_APP_URL || "https://sunzee1.com";
+  const domainUrl = process.env.NEXT_PUBLIC_APP_URL || "https://Veltra.com";
   const referralLink = `${domainUrl}/register?ref=${user.referralCode}`;
 
   return (

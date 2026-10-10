@@ -16,7 +16,7 @@ export default function Footer() {
       { name: "News", href: "#" },
     ],
     company: [
-      { name: "About SunZee1", href: "#" },
+      { name: "About Veltra", href: "#" },
       { name: "Company details", href: "#" },
       { name: "Shariah ruling", href: "#" },
       { name: "Unsubscribe", href: "#" },
@@ -32,7 +32,7 @@ export default function Footer() {
           <div className="col-span-2 flex flex-col">
             <Link href="/" className="mb-4 inline-block">
               <span className="text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-white">
-                SunZee1
+                Veltra
               </span>
             </Link>
             
@@ -41,7 +41,7 @@ export default function Footer() {
             </p>
             
             <p className="mt-auto text-xs font-medium text-gray-600">
-              © 2026 SunZee1 Labs · sunzee1.com
+              © 2026 Veltra Labs · Veltra.com
             </p>
           </div>
 

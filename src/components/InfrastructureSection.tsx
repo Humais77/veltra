@@ -28,7 +28,7 @@ export default function InfrastructureSection() {
     {
       icon: <Users size={24} />,
       title: "5-level referral program",
-      description: "Invite people to SunZee1 and earn commission on their investments — up to five levels deep.",
+      description: "Invite people to Veltra and earn commission on their investments — up to five levels deep.",
     },
     {
       icon: <Building2 size={24} />,

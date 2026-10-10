@@ -264,11 +264,10 @@ function SummaryCard({ icon, label, value }: { icon: React.ReactNode; label: str
   );
 }
 
-function formatDate(date: Temporal.Instant) {
-  const jsDate = new Date(date.epochMilliseconds);
+function formatDate(date: Date) {
   return new Intl.DateTimeFormat("en-PK", {
     dateStyle: "medium",
-  }).format(jsDate);
+  }).format(date);
 }
 
 function EmptyRunning() {

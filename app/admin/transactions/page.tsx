@@ -91,7 +91,7 @@ export default async function AdminTransactionsPage() {
 
                       <td className="px-6 py-5 text-xs text-gray-500">
                         {new Date(
-                          transaction.createdAt.epochMilliseconds
+                          transaction.createdAt
                         ).toLocaleString("en-PK")}
                       </td>
                     </tr>

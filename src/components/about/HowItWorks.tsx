@@ -6,7 +6,7 @@ export default function HowItWorks() {
     {
       id: "1",
       title: "You choose an investment plan",
-      description: "Each plan sets a minimum and maximum amount, a profit rate and a term. You fund it from your SunZee1 wallet after a deposit is credited.",
+      description: "Each plan sets a minimum and maximum amount, a profit rate and a term. You fund it from your Veltra wallet after a deposit is credited.",
     },
     {
       id: "2",

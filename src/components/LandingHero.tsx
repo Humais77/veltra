@@ -38,7 +38,7 @@ export default function HeroSection() {
 
           {/* Description */}
           <p className="mb-8 text-base leading-relaxed text-gray-400 md:text-lg">
-            SunZee1 is a solar energy investment platform. Invest in real solar
+            Veltra is a solar energy investment platform. Invest in real solar
             power plants, watch your money work in real-time, and earn profit
             from clean energy every day.{" "}
             <span className="font-medium text-pink-400">

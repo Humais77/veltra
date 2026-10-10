@@ -91,14 +91,14 @@ export default async function AdminInvestmentsPage() {
 
                       <td className="px-6 py-5 text-xs text-gray-500">
                         {new Date(
-                          investment.startedAt.epochMilliseconds
+                          investment.startedAt
                         ).toLocaleDateString("en-PK")}
                       </td>
 
                       <td className="px-6 py-5 text-xs text-gray-500">
                         {investment.completedAt
                           ? new Date(
-                              investment.completedAt.epochMilliseconds
+                              investment.completedAt
                             ).toLocaleDateString("en-PK")
                           : "-"}
                       </td>
