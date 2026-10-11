@@ -24,25 +24,25 @@ export default function HeroSection() {
           <div className="mb-6 flex items-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/5 px-3 py-1.5">
             <div className="h-2 w-2 rounded-full bg-pink-400 animate-pulse" />
             <span className="text-[10px] font-bold tracking-widest text-pink-400 uppercase">
-              Live • Solar Powered
+              Live • Wealth Beyond Limits
             </span>
           </div>
 
           {/* Heading */}
           <h1 className="mb-4 text-5xl font-black leading-[1.1] tracking-tight text-white md:text-6xl lg:text-7xl">
-            Earn daily profit <br />
+            The world of wealth <br />
             <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-              from sunlight.
+              beyond limits.
             </span>
           </h1>
 
           {/* Description */}
           <p className="mb-8 text-base leading-relaxed text-gray-400 md:text-lg">
-            Veltra is a solar energy investment platform. Invest in real solar
-            power plants, watch your money work in real-time, and earn profit
-            from clean energy every day.{" "}
+            Veltra is an investment platform built for people who refuse to settle.
+            Grow your money in real-time and unlock opportunities that go beyond
+            the ordinary.{" "}
             <span className="font-medium text-pink-400">
-              Zero emissions. Infinite supply.
+              No ceilings. No limits.
             </span>
           </p>
 
@@ -64,25 +64,25 @@ export default function HeroSection() {
           <div className="mb-10 flex flex-wrap items-center gap-6 text-[11px] font-medium text-gray-400">
             <div className="flex items-center gap-1.5">
               <ShieldCheck size={14} className="text-pink-400" />
-              <span>ISO 27001 secured cells</span>
+              <span>Bank-grade security</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Activity size={14} className="text-purple-400" />
-              <span>Real-time PV telemetry</span>
+              <span>Real-time earnings tracking</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Zap size={14} className="text-indigo-400" />
-              <span>Settled hourly on-chain</span>
+              <span>Instant settlements</span>
             </div>
           </div>
 
           {/* Stats Row */}
           <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
             {[
-              { label: "KWH GENERATED", value: "1,842,337" },
               { label: "ACTIVE MEMBERS", value: "12,408" },
+              { label: "TOTAL PAID OUT", value: "Rs. 84.2M" },
               { label: "AVG. DAILY PROFIT", value: "1.62%" },
-              { label: "ENERGY UPTIME", value: "99.94%" },
+              { label: "UPTIME", value: "99.94%" },
             ].map((stat, i) => (
               <div key={i} className="rounded-xl border border-white/5 bg-white/5 p-3 backdrop-blur-md">
                 <p className="mb-1 text-[9px] font-bold tracking-wider text-gray-500 uppercase">
@@ -102,7 +102,7 @@ export default function HeroSection() {
           <div className="mb-4 flex items-center justify-between px-2 pt-2 text-[10px] font-bold tracking-widest text-gray-500">
             <div className="flex items-center gap-2">
               <div className="h-1.5 w-1.5 rounded-full bg-pink-500" />
-              <span>ARRAY-NM-12 · LIVE</span>
+              <span>PORTFOLIO-NM-12 · LIVE</span>
             </div>
             <span>2026-10-07</span>
           </div>
@@ -111,12 +111,12 @@ export default function HeroSection() {
           <div className="relative mb-3 overflow-hidden rounded-xl border border-white/5 bg-[#0c102a] p-4 h-48 flex flex-col justify-between">
             <div className="flex justify-between relative z-10">
               <div>
-                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Today's Yield</p>
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Today's Earnings</p>
                 <p className="text-3xl font-black text-pink-400 mt-1">+$184.20</p>
               </div>
               <div className="text-right">
-                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Power</p>
-                <p className="text-lg font-bold text-purple-400 mt-1">4.86 kW</p>
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Growth</p>
+                <p className="text-lg font-bold text-purple-400 mt-1">+4.86%</p>
               </div>
             </div>
 
@@ -138,12 +138,11 @@ export default function HeroSection() {
                 stroke="#d8b4fe" 
                 strokeWidth="2" 
               />
-              {/* Glowing dot on the line */}
               <circle cx="300" cy="20" r="4" fill="#fbcfe8" className="animate-pulse shadow-[0_0_10px_#fbcfe8]" />
             </svg>
           </div>
 
-          {/* Solar Panel Grid */}
+          {/* Grid Visual */}
           <div className="grid grid-cols-8 gap-1 p-2 rounded-xl bg-[#060814]">
             {Array.from({ length: 24 }).map((_, i) => (
               <div 
@@ -157,7 +156,7 @@ export default function HeroSection() {
           <div className="mt-4 flex items-center justify-between px-2 pb-1 text-[10px] font-bold tracking-widest text-gray-500">
             <div className="flex items-center gap-2">
               <div className="h-1 w-1 rounded-full bg-purple-500" />
-              <span>INVERTERS SYNC</span>
+              <span>SYSTEMS SYNC</span>
             </div>
             <div className="flex gap-4">
               <span>H 21.8%</span>

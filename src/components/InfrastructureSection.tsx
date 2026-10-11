@@ -12,12 +12,12 @@ export default function InfrastructureSection() {
   const features = [
     {
       icon: <Cpu size={24} />,
-      title: "Real-time telemetry",
-      description: "Every solar plant streams live kWh, panel temperature, and earnings data into your dashboard.",
+      title: "Real-time tracking",
+      description: "Every investment streams live earnings, portfolio performance, and payout data into your dashboard.",
     },
     {
       icon: <Zap size={24} />,
-      title: "Hourly settlement",
+      title: "Hourly settlements",
       description: "Profits land in your earning wallet 24 times a day — not once a month, not at maturity.",
     },
     {
@@ -32,8 +32,8 @@ export default function InfrastructureSection() {
     },
     {
       icon: <Building2 size={24} />,
-      title: "Audited PPAs",
-      description: "All power-purchase agreements are independently audited. We publish quarterly attestations.",
+      title: "Audited operations",
+      description: "All financial operations are independently audited. We publish quarterly attestations.",
     },
     {
       icon: <ShieldCheck size={24} />,

@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Veltra - Solar Energy Investment Platform",
-  description: "Invest in real solar power plants and earn daily profit from sunlight.",
+  title: "Veltra — The World of Wealth Beyond Limits",
+  description:
+    "Veltra is an investment platform built for growth without limits. Track your earnings in real time and unlock opportunities beyond the ordinary.",
 };
 
 export default function RootLayout({

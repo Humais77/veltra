@@ -1,26 +1,26 @@
 import React from "react";
-import { Leaf, Lock, Globe, Sun } from "lucide-react";
+import { Leaf, Lock, Globe, TrendingUp } from "lucide-react";
 
 export default function NetworkSection() {
-  const solarArrays = [
+  const markets = [
     {
-      name: "Mojave Array NV-12",
-      capacity: "86 MW",
+      name: "Growth Portfolio A-12",
+      capacity: "86% APY",
       utilization: 92,
     },
     {
-      name: "Andalusia Field ES-04",
-      capacity: "64 MW",
+      name: "Growth Portfolio B-04",
+      capacity: "64% APY",
       utilization: 78,
     },
     {
-      name: "Rajasthan Mesh IN-22",
-      capacity: "102 MW",
+      name: "Growth Portfolio C-22",
+      capacity: "102% APY",
       utilization: 88,
     },
     {
-      name: "Atacama Cluster CL-07",
-      capacity: "54 MW",
+      name: "Growth Portfolio D-07",
+      capacity: "54% APY",
       utilization: 71,
     },
   ];
@@ -39,23 +39,23 @@ export default function NetworkSection() {
 
           {/* Heading */}
           <h2 className="mb-6 text-4xl font-black leading-tight tracking-tight text-white md:text-5xl">
-            A planet wired for{" "}
+            A world wired for{" "}
             <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-[#4020bd] bg-clip-text text-transparent">
-              sunshine
+              wealth
             </span>
           </h2>
 
           {/* Description */}
           <p className="mb-10 text-base leading-relaxed text-gray-400 md:text-lg max-w-md">
-            We co-own and operate solar arrays across four continents. When the sun sets in one hemisphere, it's already rising on the next. The grid never sleeps.
+            We operate growth portfolios across multiple markets worldwide. When one market sleeps, another wakes. Your money never stops working.
           </p>
 
           {/* Features List */}
           <div className="flex flex-col gap-5">
             {[
-              { icon: <Leaf size={18} />, text: "4.2 GW combined nameplate capacity" },
-              { icon: <Lock size={18} />, text: "PPAs with tier-1 utility offtakers" },
-              { icon: <Globe size={18} />, text: "Geographic load-balancing — 24/7 output" },
+              { icon: <Leaf size={18} />, text: "Diversified across 4 global markets" },
+              { icon: <Lock size={18} />, text: "Institutional-grade custody and compliance" },
+              { icon: <Globe size={18} />, text: "Geographic load-balancing — 24/7 returns" },
             ].map((feature, idx) => (
               <div key={idx} className="flex items-center gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-pink-500/20 bg-pink-500/10 text-pink-400 shadow-[inset_0_0_10px_rgba(236,72,153,0.1)]">
@@ -69,26 +69,26 @@ export default function NetworkSection() {
           </div>
         </div>
 
-        {/* Right Column: Array Progress Cards */}
+        {/* Right Column: Portfolio Progress Cards */}
         <div className="flex flex-col gap-4">
-          {solarArrays.map((array, idx) => (
+          {markets.map((market, idx) => (
             <div 
               key={idx}
               className="group flex flex-col justify-center rounded-2xl border border-white/5 bg-[#080b1f] p-4 transition-all hover:bg-[#0c102a] hover:border-pink-500/30 md:p-5"
             >
               <div className="mb-4 flex items-center justify-between">
                 
-                {/* Array Info */}
+                {/* Portfolio Info */}
                 <div className="flex items-center gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#4020bd]/20 text-pink-400">
-                    <Sun size={20} />
+                    <TrendingUp size={20} />
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-white md:text-base">
-                      {array.name}
+                      {market.name}
                     </h3>
                     <p className="mt-0.5 text-[11px] font-bold tracking-widest text-gray-500 uppercase">
-                      {array.capacity} · LIVE
+                      {market.capacity} · LIVE
                     </p>
                   </div>
                 </div>
@@ -96,7 +96,7 @@ export default function NetworkSection() {
                 {/* Utilization Stats */}
                 <div className="text-right">
                   <p className="text-lg font-bold text-white md:text-xl">
-                    {array.utilization}%
+                    {market.utilization}%
                   </p>
                   <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase">
                     Utilization
@@ -108,7 +108,7 @@ export default function NetworkSection() {
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
                 <div 
                   className="h-full rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-[#063d82] shadow-[0_0_10px_rgba(236,72,153,0.4)] transition-all duration-1000 ease-out"
-                  style={{ width: `${array.utilization}%` }}
+                  style={{ width: `${market.utilization}%` }}
                 />
               </div>
             </div>

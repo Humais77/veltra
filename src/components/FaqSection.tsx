@@ -17,11 +17,11 @@ export default function FaqSection() {
     },
     {
       question: "Is Veltra real or fake?",
-      answer: "Veltra is a verified, fully audited platform. We co-own and operate physical solar arrays globally and our PPAs are independently audited to ensure complete transparency.",
+      answer: "Veltra is a verified, fully audited platform. We operate transparent, independently verified investment products and publish regular attestations so members can confirm everything is real.",
     },
     {
       question: "Is Veltra halal?",
-      answer: "Yes. Our investment model is based on actual physical assets (solar panels) generating real-world utility (electricity). Returns are generated from legitimate commerce, not interest (riba).",
+      answer: "Yes. Our investment model is based on real, tangible business activity. Returns are generated from legitimate commerce, not interest (riba).",
     },
     {
       question: "Can I use Veltra in Pakistan?",

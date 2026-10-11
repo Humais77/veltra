@@ -37,7 +37,7 @@ export default function Footer() {
             </Link>
             
             <p className="mb-12 max-w-sm text-sm leading-relaxed text-gray-400">
-              Solar-powered yield infrastructure. Onboard sunlight to your portfolio.
+              The world of wealth beyond limits. Built for those who refuse to settle.
             </p>
             
             <p className="mt-auto text-xs font-medium text-gray-600">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Sun } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export default function CtaSection() {
   return (
@@ -18,20 +18,20 @@ export default function CtaSection() {
             {/* Left: Text Content */}
             <div className="max-w-2xl">
               <h2 className="mb-4 text-3xl font-black tracking-tight text-white md:text-4xl lg:text-5xl">
-                The sun is up.{" "}
+                Your limits end here.{" "}
                 <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-[#4020bd] bg-clip-text text-transparent">
-                  The grid is waiting.
+                  The wealth begins now.
                 </span>
               </h2>
               <p className="text-base text-gray-400 md:text-lg">
-                Join 12,000+ members already earning from real solar power. Registration takes under a minute.
+                Join 12,000+ members already growing beyond limits. Registration takes under a minute.
               </p>
             </div>
 
             {/* Right: Action Buttons */}
             <div className="flex shrink-0 flex-wrap items-center gap-4">
               <button className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#4020bd] via-[#3520a8] to-[#063d82] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_20px_rgba(64,32,189,0.4)] transition-all hover:scale-105 hover:shadow-[0_4px_30px_rgba(64,32,189,0.6)] hover:to-pink-600">
-                <Sun size={18} />
+                <Sparkles size={18} />
                 Register now
               </button>
               

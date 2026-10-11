@@ -4,10 +4,10 @@ import Footer from "@/src/components/Footer";
 import LandingHeader from "@/src/components/LandingHeader";
 import React from "react";
 
-
 export const metadata = {
   title: "About Us | Veltra",
-  description: "Learn about Veltra, a registered solar energy investment platform.",
+  description:
+    "Learn about Veltra — the world of wealth beyond limits. A registered investment platform built for growth.",
 };
 
 export default function AboutPage() {
@@ -23,10 +23,6 @@ export default function AboutPage() {
         {/* Modular Sections */}
         <AboutHero />
         <HowItWorks />
-        
-        {/* You can easily drop in more sections here later */}
-        {/* <CompanyDetails /> */}
-        {/* <SecurityAudits /> */}
         
       </main>
 

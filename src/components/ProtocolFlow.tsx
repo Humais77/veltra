@@ -1,27 +1,27 @@
 import React from "react";
-import { Sun, Zap, Network, Wallet } from "lucide-react";
+import { Wallet, TrendingUp, Network, Coins } from "lucide-react";
 
 export default function ProtocolFlow() {
   const steps = [
     {
       id: "01",
       step: "STEP 1/4",
-      title: "Photon capture",
-      description: "Sunlight strikes monocrystalline cells across our deployed solar arrays in Nevada, Andalusia, and Rajasthan.",
-      icon: <Sun size={24} />,
+      title: "Deposit funds",
+      description: "Top up your Veltra wallet using any of our supported payment methods — bank transfer, mobile wallet, or crypto.",
+      icon: <Wallet size={24} />,
     },
     {
       id: "02",
       step: "STEP 2/4",
-      title: "Convert & store",
-      description: "Inverters route DC into grid-tied power and lithium-iron banks, smoothing supply 24/7.",
-      icon: <Zap size={24} />,
+      title: "Choose a plan",
+      description: "Pick a plan that matches your goals. Each plan shows its reward rate and duration up front — no hidden terms.",
+      icon: <TrendingUp size={24} />,
     },
     {
       id: "03",
       step: "STEP 3/4",
-      title: "Profit to members",
-      description: "Revenue from electricity sales is shared with Veltra members every hour, based on investment size.",
+      title: "Earn automatically",
+      description: "Your investment starts working immediately. Earnings land in your wallet every hour, based on your plan size.",
       icon: <Network size={24} />,
     },
     {
@@ -29,7 +29,7 @@ export default function ProtocolFlow() {
       step: "STEP 4/4",
       title: "Withdraw or reinvest",
       description: "Take your earnings out to your wallet, or reinvest them to grow your daily profit.",
-      icon: <Wallet size={24} />,
+      icon: <Coins size={24} />,
     },
   ];
 
@@ -46,15 +46,15 @@ export default function ProtocolFlow() {
           </div>
 
           <h2 className="mb-4 text-4xl font-black tracking-tight text-white md:text-5xl">
-            From photon to{" "}
+            From deposit to{" "}
             <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
               payout
             </span>
           </h2>
 
           <p className="text-base leading-relaxed text-gray-400 md:text-lg">
-            Every kilowatt-hour generated is metered, audited, and converted into profit. Here's
-            what happens between sunrise and your wallet.
+            Every rupee is tracked, audited, and converted into profit. Here's
+            what happens between your deposit and your wallet.
           </p>
         </div>
 

@@ -20,9 +20,14 @@ export default function AboutHero() {
           </span>
         </h1>
 
+        {/* Tagline */}
+        <p className="mb-5 text-lg font-bold tracking-wide text-pink-300 md:text-xl">
+          The world of wealth beyond limits.
+        </p>
+
         {/* Intro Text */}
         <p className="text-base leading-relaxed text-gray-400 md:text-lg">
-          Veltra is a solar energy investment platform operating at{" "}
+          Veltra is an investment platform operating at{" "}
           <strong className="font-semibold text-gray-200">Veltra.com</strong>, run by{" "}
           <strong className="font-semibold text-pink-300">Veltra (Private) Limited</strong> — 
           a company registered with the Securities and Exchange Commission of Pakistan. 
