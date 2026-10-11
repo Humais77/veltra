@@ -8,15 +8,33 @@ import {
 
 import { db } from "@/src/prisma/db";
 
+
 async function InvestmentsContent() {
   await connection();
 
-  const investments = await db.orm.public.Investment
-    .orderBy((investment) => investment.createdAt.desc())
-    .include("user")
-    .include("plan")
-    .limit(200)
-    .all();
+  let investments;
+
+  try {
+    investments = await db.orm.public.Investment
+      .orderBy((investment) => investment.createdAt.desc())
+      .include("user")
+      .include("plan")
+      .limit(200)
+      .all();
+  } catch (error) {
+    console.error("ADMIN_INVESTMENTS_QUERY_ERROR:", error);
+
+    return (
+      <div className="rounded-3xl border border-red-500/20 bg-[#080b1f] p-8">
+        <h2 className="font-bold text-red-400">
+          Failed to load investments
+        </h2>
+        <p className="mt-2 text-sm text-gray-400">
+          Check the server logs for the underlying database error.
+        </p>
+      </div>
+    );
+  }
 
   if (investments.length === 0) {
     return (
@@ -54,7 +72,6 @@ async function InvestmentsContent() {
                   <p className="font-semibold">
                     {investment.user.fullName}
                   </p>
-
                   <p className="text-xs text-gray-500">
                     @{investment.user.username}
                   </p>
@@ -66,16 +83,12 @@ async function InvestmentsContent() {
 
                 <td className="px-6 py-5 font-bold">
                   Rs.{" "}
-                  {Number(
-                    investment.amount
-                  ).toLocaleString("en-PK")}
+                  {Number(investment.amount).toLocaleString("en-PK")}
                 </td>
 
                 <td className="px-6 py-5 font-bold text-emerald-400">
                   Rs.{" "}
-                  {Number(
-                    investment.reward
-                  ).toLocaleString("en-PK")}
+                  {Number(investment.reward).toLocaleString("en-PK")}
                 </td>
 
                 <td className="px-6 py-5">
@@ -83,16 +96,12 @@ async function InvestmentsContent() {
                 </td>
 
                 <td className="px-6 py-5 text-xs text-gray-500">
-                  {new Date(
-                    investment.startedAt
-                  ).toLocaleDateString("en-PK")}
+                  {new Date(investment.startedAt).toLocaleDateString("en-PK")}
                 </td>
 
                 <td className="px-6 py-5 text-xs text-gray-500">
                   {investment.completedAt
-                    ? new Date(
-                        investment.completedAt
-                      ).toLocaleDateString("en-PK")
+                    ? new Date(investment.completedAt).toLocaleDateString("en-PK")
                     : "-"}
                 </td>
               </tr>
@@ -103,6 +112,7 @@ async function InvestmentsContent() {
     </div>
   );
 }
+
 
 export default function AdminInvestmentsPage() {
   return (
