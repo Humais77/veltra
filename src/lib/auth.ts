@@ -1,3 +1,4 @@
+
 import { cookies } from "next/headers";
 import { jwtVerify, SignJWT } from "jose";
 
@@ -36,8 +37,8 @@ export async function createSession(userId: string) {
 }
 
 export async function getSession() {
-  const cookieStore = await cookies();
 
+  const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
 
   if (!token) {
@@ -67,14 +68,10 @@ export async function getCurrentUser() {
   }
 
   const user = await db.orm.public.User.where({
-  id: session.userId,
-}).first();
+    id: session.userId,
+  }).first();
 
-  if (!user) {
-    return null;
-  }
-
-  if (user.status !== "ACTIVE") {
+  if (!user || user.status !== "ACTIVE") {
     return null;
   }
 
@@ -83,6 +80,5 @@ export async function getCurrentUser() {
 
 export async function logout() {
   const cookieStore = await cookies();
-
   cookieStore.delete(COOKIE_NAME);
 }
